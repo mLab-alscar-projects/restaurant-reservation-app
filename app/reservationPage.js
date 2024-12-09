@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 
+
 // ICONS
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import PeopleTimeDate from '../Components/toggles';
@@ -46,8 +47,6 @@ const ReservationPage = () => {
   };
 
   return (
-
-    
     
     <View style={styles.container}>
         
@@ -82,7 +81,7 @@ const ReservationPage = () => {
 
       {/* ADD MORE MENU BUTTON */}
       <View style={styles.addButtonWrapper}>
-        <Pressable style={styles.addButton}>
+        <Pressable style={styles.addButton} onPress={()=>  router.push("/checkoutPage")}>
           <Text style={styles.addButtonText}>Reserve</Text>
         </Pressable>
       </View>
