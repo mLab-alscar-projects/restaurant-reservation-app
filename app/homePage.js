@@ -13,16 +13,18 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useRouter } from 'expo-router';
 
 const { width } = Dimensions.get('window');
 
 const HomePage = () => {
   const [searchQuery, setSearchQuery] = useState('');
+  const router = useRouter();
 
   const restaurants = [
     {
       id: '1',
-      name: 'Bella Cucina',
+      name: "Foodies' Delight",
       rating: 4.5,
       distance: 2.3,
       cuisines: ['Italian', 'Mediterranean'],
@@ -32,7 +34,7 @@ const HomePage = () => {
     },
     {
       id: '2',
-      name: 'Sushi Sensation',
+      name: "Eat' In",
       rating: 4.8,
       distance: 1.5,
       cuisines: ['Japanese', 'Sushi'],
@@ -42,7 +44,7 @@ const HomePage = () => {
     },
     {
       id: '3',
-      name: 'Spice Route',
+      name: "Munchies",
       rating: 4.6,
       distance: 3.2,
       cuisines: ['Indian', 'Fusion'],
@@ -97,6 +99,13 @@ const HomePage = () => {
             onChangeText={setSearchQuery}
             placeholderTextColor="#888"
           />
+           <TouchableOpacity style={styles.mapButton} onPress={()=>  router.push("/mapPage")}>
+              <Ionicons 
+                name="map-outline" 
+                size={24} 
+                color="#333" 
+              />
+           </TouchableOpacity>
         </View>
       </View>
 
@@ -254,6 +263,10 @@ const styles = StyleSheet.create({
   cuisineText: {
     fontSize: 14,
     color: '#888',
+  },
+  mapButton: {
+    marginLeft: 10,
+    padding: 5,
   },
 });
 
