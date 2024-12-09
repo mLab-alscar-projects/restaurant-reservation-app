@@ -1,5 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, Dimensions } from 'react-native';
+
+const {width} = Dimensions.get('window');
 
 const SplashScreenChild = () => {
  

@@ -12,7 +12,7 @@ export default function Index() {
   useEffect(() => {
     const splashTimeout = setTimeout(() => {
       setShowSplash(false); 
-      router.push("/LoginScreen"); 
+      router.push("/loginPage"); 
     }, 3000); 
 
     return () => clearTimeout(splashTimeout); 
