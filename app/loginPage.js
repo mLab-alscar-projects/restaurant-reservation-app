@@ -17,7 +17,7 @@ const LoginPage = () => {
   
  return (
     <View style={styles.Parentlogin}>
-
+     
         {/* FIRST CHILD */}
         <View style={styles.firstChildlogin}>
             <View style={styles.siblinglogin}>

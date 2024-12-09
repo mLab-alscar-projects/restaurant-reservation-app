@@ -92,18 +92,6 @@ lastChild:
       color: '#231934'
   },
 
-  // ENDS
-HomeParent: 
-{
-flex: 1,
-justifyContent: 'space-between',
-alignItems: 'center',
-flexDirection: 'row',
-backgroundColor: '#f9f9f9',
-padding: 0,
-margin: 0,
-},
-
 
 
 
@@ -499,6 +487,76 @@ buttonTextreset:
       fontWeight: 'bold',
       textTransform: 'uppercase'
   },
+
+
+
+//   Home Page Styling
+HomeParent:{
+    flex:1,
+    // backgroundColor:"pink",
+    flex: 1,
+    flexDirection: 'column',
+    padding: 0,
+    margin: 0,
+    gap:5
+    
+},
+
+usercontainer:{
+    marginTop:10,
+    width:"100%",
+    // backgroundColor:"red",
+    height:75,
+    justifyContent:"flex-end",
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding:20
+},
+
+searchbar:{
+    gap:10,
+    justifyContent:"center",
+    alignItems:"center",
+    flexDirection:"row"
+},
+
+searchbarinput: {
+    width: '50%', // Adjust width to fit nicely on the screen
+    height: 50, // Set height for consistency
+    paddingHorizontal: 10, // Inner spacing for text
+    borderColor: '#ccc', // Subtle border color
+    borderWidth: 1, // Border thickness
+    borderRadius: 8, // Rounded corners
+    backgroundColor: '#fff', // White background
+    fontSize: 16, // Font size for text input
+    color: '#333', // Text color
+  },
+
+mapbutton:{
+    height:50,
+    alignItems:"center",
+    justifyContent:"center"
+},
+
+homeTextheading:{
+    marginTop:20,
+    padding:20
+},
+cardscontainer:{
+    justifyContent:"center",
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding:20,
+    gap:30
+},
+cards:{
+    height:150,
+    backgroundColor:"purple",
+    width:"100%",
+    borderRadius:20
+}
+
+
 
 })
 
