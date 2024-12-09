@@ -120,6 +120,7 @@ const HomePage = () => {
               styles.restaurantCard, 
               { borderLeftColor: restaurant.accentColor }
             ]}
+            onPress={()=>  router.push("/reservationPage")}
           >
             <Image 
               source={require('../assets/Burger.jpg')}
