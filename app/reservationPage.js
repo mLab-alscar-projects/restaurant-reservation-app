@@ -13,6 +13,7 @@ import { useRouter } from 'expo-router';
 
 // ICONS
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import PeopleTimeDate from '../Components/toggles';
 
 // SCREEN DIMENSIONS
 const { width } = Dimensions.get('window');
@@ -49,11 +50,12 @@ const ReservationPage = () => {
     
     
     <View style={styles.container}>
+        
       {/* HEADER */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Foodies' Delight</Text>
       </View>
-
+      <PeopleTimeDate/>
       {/* MENU LIST */}
       <FlatList
         data={menuData}
@@ -81,8 +83,7 @@ const ReservationPage = () => {
       {/* ADD MORE MENU BUTTON */}
       <View style={styles.addButtonWrapper}>
         <Pressable style={styles.addButton}>
-          <MaterialIcons name="add" size={20} color={'#fff'} />
-          <Text style={styles.addButtonText}>Add Menu</Text>
+          <Text style={styles.addButtonText}>Reserve</Text>
         </Pressable>
       </View>
     </View>
@@ -101,6 +102,7 @@ const styles = StyleSheet.create({
     padding: 20,
     alignItems: 'center',
     justifyContent: 'center',
+    marginBottom:20
   },
 
   headerTitle: {
