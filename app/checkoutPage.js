@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, Dimensions,Pressable} from 'react-native';
-
+import { useRouter } from 'expo-router';
 
 const PaymentSummaryPage = () => {
-
+  const router = useRouter();
   // Sample data - in a real app, this would come from props or state
   const paymentDetails = {
     name: "John Doe",
@@ -51,7 +51,7 @@ const PaymentSummaryPage = () => {
       
       {/* Checkout button */}
       <View style={styles.addButtonWrapper}>
-        <Pressable style={styles.addButton} >
+        <Pressable style={styles.addButton} onPress={()=>  router.push("/paymentPage")}>
           <Text style={styles.addButtonText}>Pay</Text>
         </Pressable>
       </View>
