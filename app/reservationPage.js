@@ -16,6 +16,7 @@ import { useRouter } from 'expo-router';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import PeopleTimeDate from '../Components/toggles';
 
+
 // SCREEN DIMENSIONS
 const { width } = Dimensions.get('window');
 

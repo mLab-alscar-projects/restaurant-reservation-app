@@ -48,7 +48,7 @@ const PaymentSummaryPage = () => {
       
       {/* Checkout button */}
       <View style={styles.addButtonWrapper}>
-        <Pressable style={styles.addButton} onPress={()=>  router.push("/checkoutPage")}>
+        <Pressable style={styles.addButton} >
           <Text style={styles.addButtonText}>Pay</Text>
         </Pressable>
       </View>
