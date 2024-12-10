@@ -18,7 +18,9 @@ export default function Index() {
     return () => clearTimeout(splashTimeout); 
   }, []);
 
-// Display splash screen
+
+
+// Beginning of rendered Components
   return (
     <View style={styles.splashContainer}>
 
@@ -32,8 +34,11 @@ export default function Index() {
   );
 }
 
-const styles = StyleSheet.create({
+// End of rendered Components
 
+
+// Styles
+const styles = StyleSheet.create({
   // SPLASH
   splashContainer: 
   {
@@ -43,8 +48,6 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       gap: 40
   },
-
-
   splashLogo: 
   {
       width: '100%',

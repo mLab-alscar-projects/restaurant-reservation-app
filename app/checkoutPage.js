@@ -22,6 +22,8 @@ const PaymentSummaryPage = () => {
     </View>
   );
 
+
+  // Beginning of rendered Components
   return (
     <ScrollView style={styles.container}>
       {/* Flower decorations */}
@@ -56,7 +58,11 @@ const PaymentSummaryPage = () => {
     </ScrollView>
   );
 };
+// End of Rendered Components
 
+
+
+// Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,

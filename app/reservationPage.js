@@ -49,10 +49,14 @@ const ReservationPage = () => {
     ]);
   };
 
-  return (
-    
+
+
+
+  
+// Beginning of rendered Components
+  return (  
     <View style={styles.container}>
-        
+      
       {/* HEADER */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Foodies' Delight</Text>
@@ -97,7 +101,11 @@ const ReservationPage = () => {
     </View>
   );
 };
+// END
 
+
+
+// Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,

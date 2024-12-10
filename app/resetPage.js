@@ -11,9 +11,10 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 
 
-// Functional component start
 const ResetPage = () => {
 
+
+// Beginning of rendered Components
  return (
     <View style={styles.Parentreset}>
 
@@ -54,8 +55,6 @@ const ResetPage = () => {
     </View>
   );
 };
-
-
 // ENDS
 
 export default ResetPage;
