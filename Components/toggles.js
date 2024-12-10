@@ -5,12 +5,18 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
 
 // Beginning of Functional component
-const PeopleTimeDate = ({ date, setDate }) => {
-  const [selectedValue, setSelectedValue] = useState(1);
+const PeopleTimeDate = ({selectedDateTime,handleChange, selectedValue,setSelectedValue}) => {
+  
+  // States
   const [isModalVisible, setIsModalVisible] = useState(false);
+ 
+ 
+ 
+//  Functions to change states
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
   };
+
 
   return (
     <View style={styles.container}>
@@ -32,13 +38,17 @@ const PeopleTimeDate = ({ date, setDate }) => {
           <View style={styles.modalContent}>
             {/* Date and Time Picker */}
             <Text style={{textAlign:"center", fontSize:20}}>Select Date and Time</Text>
+
             <View>
               <DateTimePicker
                 display="spinner"
-                value={new Date()}
+                value={selectedDateTime}
                 mode="datetime"
+                onChange={handleChange}
               />
+              {/* {console.log(selectedDateTime)} */}
             </View>
+            
               <Text style={{textAlign:"center", fontSize:20}}>Select Number of People</Text>
             <View>   
               <Picker
@@ -55,6 +65,7 @@ const PeopleTimeDate = ({ date, setDate }) => {
                     />
                   )
                 )}
+                {console.log(selectedValue)}
               </Picker>
             </View>
 
