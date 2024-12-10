@@ -43,7 +43,9 @@ const ReservationPage = () => {
       router.push({
         pathname: "./checkoutPage",
         params:{selectedValue}
+    
       })
+      console.log("number",selectedValue)
   }
   
  

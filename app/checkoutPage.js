@@ -1,16 +1,16 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, Dimensions,Pressable} from 'react-native';
 import { useRouter } from 'expo-router';
-import PeopleTimeDate from '../Components/toggles';
-import { useSearchParams } from 'expo-router/build/hooks';
+import { useSearchParams } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 
 
 
 const PaymentSummaryPage = () => {
   // Hooks
   const router = useRouter();
-  const {selectedValue} = useSearchParams();
-
+  const {selectedValue} = useLocalSearchParams ();
+  {console.log("value",selectedValue)}
 
   // Sample data - in a real app, this would come from props or state
   const paymentDetails = {
