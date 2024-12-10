@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, Dimensions,Pressable} from 'react-native';
 
-const { width } = Dimensions.get('window');
 
 const PaymentSummaryPage = () => {
+
   // Sample data - in a real app, this would come from props or state
   const paymentDetails = {
     name: "John Doe",
@@ -33,7 +33,8 @@ const PaymentSummaryPage = () => {
         source={require('../assets/Burger.jpg')} 
         style={[styles.flowerRight, styles.flower]} 
       />
-
+       
+       {/* Data from paymentDetails displayed as a row */}
       <View style={styles.contentContainer}>
         <Text style={styles.title}>Payment Summary</Text>
 
