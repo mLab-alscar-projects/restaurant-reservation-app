@@ -4,7 +4,9 @@ import MapView, { Marker } from 'react-native-maps';
 
 export default function GoogleMap() {
 
-    
+  
+
+// Beginning of rendered Components
   return (
     <View style={styles.container}>
       <MapView
@@ -27,6 +29,11 @@ export default function GoogleMap() {
   );
 }
 
+// End 
+
+
+
+// Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,

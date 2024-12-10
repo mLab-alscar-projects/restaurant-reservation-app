@@ -11,7 +11,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 
 
-// Functional component start
+// Beginning of rendered Components
 const RegisterPage = () => {
 
  return (

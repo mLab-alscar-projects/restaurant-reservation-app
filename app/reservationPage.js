@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { 
   StyleSheet, 
   Text, 
@@ -11,17 +11,20 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 
-
 // ICONS
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import PeopleTimeDate from '../Components/toggles';
+
 
 // SCREEN DIMENSIONS
 const { width } = Dimensions.get('window');
 
 const ReservationPage = () => {
+// States
+  const [date,setDate]=useState(new Date());
+  const router = useRouter()
+  
  
-   const router = useRouter()
   // MOCK MENU DATA
   const menuData = [
     { id: '1', name: 'Grilled Chicken', price: 'R62.99', image: require('../assets/chicken.jpg') },
@@ -46,15 +49,24 @@ const ReservationPage = () => {
     ]);
   };
 
-  return (
-    
+
+
+
+  
+// Beginning of rendered Components
+  return (  
     <View style={styles.container}>
-        
+      
       {/* HEADER */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Foodies' Delight</Text>
       </View>
-      <PeopleTimeDate/>
+
+
+      {/* DATE TIME PEOPLE COMPONENT FROM UTILS */}
+      <PeopleTimeDate date={date} setDate={setDate}/>
+
+
       {/* MENU LIST */}
       <FlatList
         data={menuData}
@@ -79,6 +91,7 @@ const ReservationPage = () => {
         contentContainerStyle={styles.menuList}
       />
 
+
       {/* ADD MORE MENU BUTTON */}
       <View style={styles.addButtonWrapper}>
         <Pressable style={styles.addButton} onPress={()=>  router.push("/checkoutPage")}>
@@ -88,7 +101,11 @@ const ReservationPage = () => {
     </View>
   );
 };
+// END
 
+
+
+// Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,

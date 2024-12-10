@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, Dimensions,Pressable} from 'react-native';
-
-const { width } = Dimensions.get('window');
+import { useRouter } from 'expo-router';
 
 const PaymentSummaryPage = () => {
+  const router = useRouter();
   // Sample data - in a real app, this would come from props or state
   const paymentDetails = {
     name: "John Doe",
@@ -22,6 +22,8 @@ const PaymentSummaryPage = () => {
     </View>
   );
 
+
+  // Beginning of rendered Components
   return (
     <ScrollView style={styles.container}>
       {/* Flower decorations */}
@@ -33,7 +35,8 @@ const PaymentSummaryPage = () => {
         source={require('../assets/Burger.jpg')} 
         style={[styles.flowerRight, styles.flower]} 
       />
-
+       
+       {/* Data from paymentDetails displayed as a row */}
       <View style={styles.contentContainer}>
         <Text style={styles.title}>Payment Summary</Text>
 
@@ -48,14 +51,18 @@ const PaymentSummaryPage = () => {
       
       {/* Checkout button */}
       <View style={styles.addButtonWrapper}>
-        <Pressable style={styles.addButton} onPress={()=>  router.push("/checkoutPage")}>
+        <Pressable style={styles.addButton} onPress={()=>  router.push("/paymentPage")}>
           <Text style={styles.addButtonText}>Pay</Text>
         </Pressable>
       </View>
     </ScrollView>
   );
 };
+// End of Rendered Components
 
+
+
+// Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,

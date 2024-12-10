@@ -72,6 +72,9 @@ const HomePage = () => {
     );
   };
 
+
+
+// Beginning  of rendered Components
   return (
     <View style={styles.container}>
       <SafeAreaView edges={['top']} />
@@ -80,11 +83,15 @@ const HomePage = () => {
       <View style={styles.headerContainer}>
         <View style={styles.headerContent}>
           <Text style={styles.greeting}>Discover Restaurants</Text>
-          <TouchableOpacity style={styles.profileButton}>
+
+
+          {/* Pressable user profile button */}
+          <TouchableOpacity style={styles.profileButton} onPress={()=>  router.push("/profilePage")}>
             <Ionicons name="person-circle-outline" size={32} color="#333" />
           </TouchableOpacity>
         </View>
-
+       
+       {/* Search bar and map button */}
         <View style={styles.searchContainer}>
           <Ionicons 
             name="search" 
@@ -161,7 +168,11 @@ const HomePage = () => {
     </View>
   );
 };
+// End of Rendered Components 
 
+
+
+// Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,

@@ -9,12 +9,17 @@ import SplashScreenChild from '../Components/SplashScreen';
 import Zocial from 'react-native-vector-icons/Zocial';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-// Functional component start
-const LoginPage = () => {
- 
-    
+
+
+
+
+// Beginning of rendered Components
+const LoginPage = () => {  
  const router = useRouter();
   
+
+
+//  Beginning of Rendered Components 
  return (
     <View style={styles.Parentlogin}>
      
@@ -75,14 +80,10 @@ const LoginPage = () => {
         
             </View>
 
-        </View>
-        {/* ENDS */}
-      
+        </View> 
     </View>
   );
 };
-
-
 // ENDS
 
 export default LoginPage;
