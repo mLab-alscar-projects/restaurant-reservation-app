@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Modal, Text, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import React, { useState } from "react";
+import { View, StyleSheet, Modal, Text, TouchableOpacity } from "react-native";
+import Icon from "react-native-vector-icons/FontAwesome";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { Picker } from "@react-native-picker/picker";
 
-const PeopleTimeDate = () => {
+// Beginning of Functional component
+const PeopleTimeDate = ({ date, setDate }) => {
+  const [selectedValue, setSelectedValue] = useState(1);
   const [isModalVisible, setIsModalVisible] = useState(false);
-
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
   };
@@ -23,11 +26,39 @@ const PeopleTimeDate = () => {
         visible={isModalVisible}
         transparent={true}
         animationType="fade"
-        onRequestClose={toggleModal} // Close modal on back button press (Android)
+        onRequestClose={toggleModal}
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            {/* <Text style={styles.modalText}>Hello, this is your popup!</Text> */}
+            {/* Date and Time Picker */}
+            <Text style={{textAlign:"center", fontSize:20}}>Select Date and Time</Text>
+            <View>
+              <DateTimePicker
+                display="spinner"
+                value={new Date()}
+                mode="datetime"
+              />
+            </View>
+              <Text style={{textAlign:"center", fontSize:20}}>Select Number of People</Text>
+            <View>   
+              <Picker
+                selectedValue={selectedValue}
+                onValueChange={(itemValue) => setSelectedValue(itemValue)}
+                style={{ height: 50, width: 150 }}
+              >
+                {Array.from({ length: 20 }, (_, index) => index + 1).map(
+                  (number) => (
+                    <Picker.Item
+                      key={number}
+                      label={`${number}`}
+                      value={number}
+                    />
+                  )
+                )}
+              </Picker>
+            </View>
+
+            {/* Close Popup Model button */}
             <TouchableOpacity onPress={toggleModal} style={styles.closeButton}>
               <Text style={styles.closeButtonText}>Confirm</Text>
             </TouchableOpacity>
@@ -41,63 +72,66 @@ const PeopleTimeDate = () => {
 const styles = StyleSheet.create({
   container: {
     borderWidth: 2,
-    borderColor: '#ddd',
+    borderColor: "#ddd",
     borderRadius: 8,
     padding: 16,
-    backgroundColor: '#fff',
-    alignSelf: 'center',
-    shadowColor: '#000',
+    backgroundColor: "#fff",
+    alignSelf: "center",
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
   },
   row: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
   },
   icon: {
     marginHorizontal: 8,
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
   },
   modalContent: {
-    width: 800,
-    height:500,
+    width: 400,
+    height: 550,
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 10,
-    alignItems: 'center',
-    shadowColor: '#000',
+    alignItems: "center",
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 5,
-    borderWidth:2,
-    borderColor:"#97CBDC"
+    borderWidth: 2,
+    borderColor: "#97CBDC",
+    alignItems: "center",
+    flexDirection: "column",
+    
   },
   modalText: {
     fontSize: 18,
     marginBottom: 20,
-    textAlign: 'center',
+    textAlign: "center",
   },
   closeButton: {
-    position:"absolute",
-    backgroundColor: '#FF5722',
+    position: "absolute",
+    backgroundColor: "#FF5722",
     borderRadius: 8,
     paddingVertical: 10,
     paddingHorizontal: 20,
-    top:430
+    top: 480,
   },
   closeButtonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 });
 
