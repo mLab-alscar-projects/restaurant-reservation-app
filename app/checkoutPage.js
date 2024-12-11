@@ -1,16 +1,24 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, Dimensions,Pressable} from 'react-native';
 import { useRouter } from 'expo-router';
+import { useSearchParams } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
+
+
 
 const PaymentSummaryPage = () => {
+  // Hooks
   const router = useRouter();
+  const {selectedValue} = useLocalSearchParams ();
+  {console.log("value",selectedValue)}
+
   // Sample data - in a real app, this would come from props or state
   const paymentDetails = {
     name: "John Doe",
     email: "johndoe@example.com",
     dateOfPayment: "2024-12-09",
     time: "19:30",
-    numberOfTables: 2,
+    numberOfTables: selectedValue,
     restaurantName: "Sunset Bistro",
     amount: "$150.50"
   };
@@ -56,6 +64,7 @@ const PaymentSummaryPage = () => {
         </Pressable>
       </View>
     </ScrollView>
+       
   );
 };
 // End of Rendered Components

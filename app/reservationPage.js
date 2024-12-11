@@ -20,9 +20,33 @@ import PeopleTimeDate from '../Components/toggles';
 const { width } = Dimensions.get('window');
 
 const ReservationPage = () => {
+
 // States
-  const [date,setDate]=useState(new Date());
-  const router = useRouter()
+  const [selectedDateTime, setselectedDateTime] = useState(new Date())
+  const [selectedValue, setSelectedValue] = useState(1);
+  const router = useRouter();
+
+
+  // functions to update state
+  const handleChange = (event, date) => {
+    if (date) {
+      const selectedDate = date.toDateString(); // Extract the date
+      const selectedTime = date.toTimeString().split(' ')[0]; // Extract the time (HH:MM:SS)
+      console.log('Date:', selectedDate);
+      console.log('Time:', selectedTime);
+      setselectedDateTime(date);
+    }
+  };
+
+  // Function to navigate
+  const handleCheckout= ()=>{
+      router.push({
+        pathname: "./checkoutPage",
+        params:{selectedValue}
+    
+      })
+      console.log("number",selectedValue)
+  }
   
  
   // MOCK MENU DATA
@@ -63,8 +87,16 @@ const ReservationPage = () => {
       </View>
 
 
-      {/* DATE TIME PEOPLE COMPONENT FROM UTILS */}
-      <PeopleTimeDate date={date} setDate={setDate}/>
+      {/* DATE TIME PEOPLE COMPONENT FROM UTILS WITH PROPS PASSED*/}
+      <PeopleTimeDate
+      selectedDateTime={selectedDateTime}
+      setselectedDateTime={setselectedDateTime}
+      selectedValue={selectedValue}
+      setSelectedValue={setSelectedValue}
+      handleChange ={handleChange}
+      />
+
+
 
 
       {/* MENU LIST */}
@@ -94,7 +126,7 @@ const ReservationPage = () => {
 
       {/* ADD MORE MENU BUTTON */}
       <View style={styles.addButtonWrapper}>
-        <Pressable style={styles.addButton} onPress={()=>  router.push("/checkoutPage")}>
+        <Pressable style={styles.addButton} onPress={handleCheckout}>
           <Text style={styles.addButtonText}>Reserve</Text>
         </Pressable>
       </View>
