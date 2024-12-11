@@ -2,6 +2,7 @@ import User from "../Models/users.js";
 import bcrypt from "bcrypt"
 import generateToken from "../utils/token.js";
 
+// user registering
 const registerUser = async (req,res)=>{
     console.log(req.body);
     try {
@@ -71,7 +72,44 @@ const loginUser = async (req,res)=>{
     }
 }
 
+// User Update Profile
+const updateProfile = async (req, res) => {
+    try {
+        const { name, phoneNumber } = req.body;
+
+        if (!name && !phoneNumber) {
+            return res.status(400).json({ error: "Please provide at least one field to update (name or phone number)" });
+        }
+
+        const userId = req.user.id; // Assuming the user id is passed in `req.user.id` by your authMiddleware
+
+        // Find and update the user
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { name, phoneNumber },
+            { new: true }  // Return the updated user document
+        );
+
+        if (!updatedUser) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        // Return the updated profile
+        res.status(200).json({
+            message: "Profile updated successfully",
+            user: {
+                name: updatedUser.name,
+                phoneNumber: updatedUser.phoneNumber
+            }
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+};
+
 export {
     loginUser,
-    registerUser
+    registerUser,
+    updateProfile
 }
