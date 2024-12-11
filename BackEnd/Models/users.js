@@ -1,17 +1,17 @@
 import mongoose from "mongoose";
-import bcrypt from "react-native-bcrypt"
+import bcrypt from "react-native-bcrypt";
 import validator from "validator";
 
 // Creating a user schema with signing fields
 const clientSchema = new mongoose.Schema({
-    email:{
+    email: {
         type: String,
-        required:true,
+        required: true,
         unique: true,
-        validate: [validator.isEmail,"Please enter a valid email"]
+        validate: [validator.isEmail, "Please enter a valid email"]
     },
-    password:{
-        type:String,
+    password: {
+        type: String,
         required: true,
         validate: {
             validator: function(value) {
@@ -23,6 +23,18 @@ const clientSchema = new mongoose.Schema({
     }
 });
 
-const User = mongoose.model("Clients",clientSchema, "clients");
+// Updating the matchPasswords method to return a Promise
+clientSchema.methods.matchPasswords = function(password) {
+    return new Promise((resolve, reject) => {
+        bcrypt.compare(password, this.password, (err, isMatch) => {
+            if (err) {
+                reject(err); // Reject on error
+            }
+            resolve(isMatch); // Resolve with the result
+        });
+    });
+};
+
+const User = mongoose.model("Clients", clientSchema, "clients");
 
 export default User;

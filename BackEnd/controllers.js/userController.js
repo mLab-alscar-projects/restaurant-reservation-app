@@ -1,5 +1,6 @@
 import User from "../Models/users.js";
 import bcrypt from "bcrypt"
+import generateToken from "../utils/token.js";
 
 const registerUser = async (req,res)=>{
     console.log(req.body);
@@ -10,7 +11,7 @@ const registerUser = async (req,res)=>{
         const userExists = await User.findOne({email})
         if (userExists){
             return res.status(400).json({
-                error:"User already exixts"
+                error:"User already exits"
             })
         }
         const hashedPassword = await bcrypt.hash(password,10)
@@ -20,11 +21,13 @@ const registerUser = async (req,res)=>{
             password:hashedPassword
         })
 
-        return res.status(201).json({
-            message: "User registered successfully",
-            user: { email: user.email } // Optionally include user details, but avoid including password
-        });
-
+        const token = await generateToken(User._id)
+        res.status(201).json({
+              message: "User registered successfully",
+            _id:user._id,
+            email:user.email,
+            token
+        })
 
     } catch (error) {
         if (error.name === "validationError"){
@@ -37,6 +40,7 @@ const registerUser = async (req,res)=>{
     }
 }
 
+// user login
 const loginUser = async (req,res)=>{
     // get the user
     try {
@@ -51,8 +55,16 @@ const loginUser = async (req,res)=>{
                 error:"invalid login credentials"
             })
         }
-        
 
+            // generate a token for registered users
+            const token = await generateToken(foundUser._id)
+            res.status(200).json({
+                message: "Login successful!",
+                _id:foundUser._id,
+                email: foundUser.email,
+                token,
+            })
+                 
     } catch (error) {
         console.error("Login error:", error); // Log the error for debugging
         res.status(500).json({error:"internal server error"})
