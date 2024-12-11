@@ -1,19 +1,17 @@
-// Import the built-in http module
-const http = require('http');
 
-// Define the port the server will listen on
-const PORT = 3000;
+import ConnectDB from "./database.js";
+import express from "express"
+import dotenv from 'dotenv';
 
-// Create the server
-const server = http.createServer((req, res) => {
-  // Set the response header to indicate plain text
-  res.writeHead(200, { 'Content-Type': 'text/plain' });
-  
-  // Send the "Hello World" response
-  res.end('Hello World\n');
-});
+// load dot env to the server (environment variables) not accessible directly to node
+dotenv.config();
 
-// Start the server
-server.listen(PORT, () => {
-  console.log(`Server is running at http://localhost:${PORT}`);
+const app = express()
+// Test the connection
+ConnectDB();
+
+// Start your server (optional)
+const PORT =  5000;
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });

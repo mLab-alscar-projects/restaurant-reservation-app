@@ -20,7 +20,7 @@ const PaymentSummaryPage = () => {
     time: "19:30",
     numberOfTables: selectedValue,
     restaurantName: "Sunset Bistro",
-    amount: "$150.50"
+    amount:selectedValue * 200
   };
 
   const DetailRow = ({ label, value }) => (
