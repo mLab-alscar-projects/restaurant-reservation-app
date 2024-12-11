@@ -1,19 +1,28 @@
-// Import the built-in http module
-const http = require('http');
+import ConnectDB from "./database.js";
+import express from "express";
+import dotenv from 'dotenv';
+import cors from "cors";
+import router from "./routes/api.js";
 
-// Define the port the server will listen on
-const PORT = 3000;
+// Load environment variables from .env file
+dotenv.config();
 
-// Create the server
-const server = http.createServer((req, res) => {
-  // Set the response header to indicate plain text
-  res.writeHead(200, { 'Content-Type': 'text/plain' });
-  
-  // Send the "Hello World" response
-  res.end('Hello World\n');
-});
+const app = express();
+
+// Middleware to parse incoming JSON requests
+app.use(express.json()); // Add this line to parse JSON request bodies
+
+// Enable CORS
+app.use(cors());
+
+// Test the database connection
+ConnectDB();
+
+// Use your API routes
+app.use('/api', router);
 
 // Start the server
-server.listen(PORT, () => {
-  console.log(`Server is running at http://localhost:${PORT}`);
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });
