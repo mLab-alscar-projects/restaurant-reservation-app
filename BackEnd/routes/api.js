@@ -12,7 +12,6 @@ router.post("/user/register", registerUser)
 
 router.put("/update-profile",  protect, updateProfile)
 
-
 router.get("/users", getUsers)
 
 
