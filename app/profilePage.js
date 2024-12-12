@@ -17,10 +17,14 @@ import {
   HelpCircle,
   Shield
 } from 'lucide-react-native';
+import { useRouter } from 'expo-router';
 
 const ProfileScreen = () => {
+  // Hooks
+  const router = useRouter();
+
   const [user] = useState({
-    name: "Oscar Poco",
+    name: "Alson",
     email: "oscar@gmail.com",
     profileImage: require('../assets/Burger.jpg'),
     memberSince: "December 2024",
@@ -58,6 +62,10 @@ const ProfileScreen = () => {
   ];
 
 
+  const handleLogout= ()=>{
+    router.push("/loginPage")
+  }
+
 
 
 // Beginning of rendered Components
@@ -68,10 +76,6 @@ const ProfileScreen = () => {
         style={styles.headerBackground}
       >
         <View style={styles.headerContent}>
-          <Pressable style={styles.settingsButton}>
-            <Settings color="white" size={24} />
-          </Pressable>
-          
           <View style={styles.profileHeaderSection}>
             <View style={styles.profileImageContainer}>
               <Image 
@@ -115,6 +119,7 @@ const ProfileScreen = () => {
               styles.menuItem, 
               item.destructive && styles.destructiveMenuItem
             ]}
+            onPress={handleLogout}
           >
             <View style={styles.menuItemIcon}>
               {item.icon}

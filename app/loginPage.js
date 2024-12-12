@@ -33,7 +33,7 @@ const LoginPage = () => {
              
             // Extract the token and store it in the local storage
             const token = response.data.token
-            console.log(token);
+            // console.log(token);
             await AsyncStorage.setItem('userToken', token)
 
             // Welcome message

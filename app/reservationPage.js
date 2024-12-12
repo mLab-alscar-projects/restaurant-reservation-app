@@ -31,10 +31,11 @@ const ReservationPage = () => {
   const handleChange = (event, date) => {
     if (date) {
       const selectedDate = date.toDateString(); // Extract the date
-      const selectedTime = date.toTimeString().split(' ')[0]; // Extract the time (HH:MM:SS)
+      const selectedTime = date.toTimeString(); // Extract the time (HH:MM:SS)
       console.log('Date:', selectedDate);
       console.log('Time:', selectedTime);
       setselectedDateTime(date);
+      
     }
   };
 
@@ -42,10 +43,10 @@ const ReservationPage = () => {
   const handleCheckout= ()=>{
       router.push({
         pathname: "./checkoutPage",
-        params:{selectedValue}
-    
+        params:{selectedValue,selectedDateTime}
       })
       console.log("number",selectedValue)
+      console.log("date", selectedDateTime)
   }
   
  
