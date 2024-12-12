@@ -9,7 +9,7 @@ router.post("/user/login", loginUser);
 
 router.post("/user/register", registerUser)
 
-router.put("/update-profile", updateProfile, protect)
+router.put("/update-profile",  protect, updateProfile)
 
 
 export default router
