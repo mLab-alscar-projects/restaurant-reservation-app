@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import bcrypt from "react-native-bcrypt";
+import bcrypt from "bcrypt";
 import validator from "validator";
 
 // Creating a user schema with signing fields
@@ -20,6 +20,16 @@ const clientSchema = new mongoose.Schema({
             },
             message: "Password must contain at least one lowercase letter, one uppercase letter, one digit, one special character, and be at least 8 characters long."
         }
+    },
+    name: {
+      type:String,
+      default:"",
+  
+    },
+    phoneNumber:{
+        type:String,
+        default:"",
+     
     }
 });
 

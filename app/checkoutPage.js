@@ -9,15 +9,14 @@ import { useLocalSearchParams } from 'expo-router';
 const PaymentSummaryPage = () => {
   // Hooks
   const router = useRouter();
-  const {selectedValue} = useLocalSearchParams ();
+  const {selectedValue,selectedDateTime} = useLocalSearchParams ();
   {console.log("value",selectedValue)}
 
   // Sample data - in a real app, this would come from props or state
   const paymentDetails = {
     name: "John Doe",
     email: "johndoe@example.com",
-    dateOfPayment: "2024-12-09",
-    time: "19:30",
+    dateOfPayment: selectedDateTime,
     numberOfTables: selectedValue,
     restaurantName: "Sunset Bistro",
     amount:selectedValue * 200
@@ -50,8 +49,7 @@ const PaymentSummaryPage = () => {
 
         <DetailRow label="Name" value={paymentDetails.name} />
         <DetailRow label="Email" value={paymentDetails.email} />
-        <DetailRow label="Date of Payment" value={paymentDetails.dateOfPayment} />
-        <DetailRow label="Time" value={paymentDetails.time} />
+        <DetailRow label="Date and Time of Payment" value={paymentDetails.dateOfPayment} />
         <DetailRow label="Number of Tables" value={paymentDetails.numberOfTables} />
         <DetailRow label="Restaurant Name" value={paymentDetails.restaurantName} />
         <DetailRow label="Total Amount" value={paymentDetails.amount} />
