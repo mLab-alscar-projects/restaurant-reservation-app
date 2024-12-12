@@ -3,6 +3,7 @@ import { Text, View, Pressable, TextInput, Alert } from 'react-native';
 import styles from '../StylesSheet/styles';
 import { useRouter } from 'expo-router';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 // SCREENS
 import SplashScreenChild from '../Components/SplashScreen';
 
@@ -20,13 +21,23 @@ const LoginPage = () => {
     // Function
     const handleLogin = async () => {
         try {
+            // Login the user
             const response = await axios.post(
                 'https://lumpy-clover-production.up.railway.app/api/user/login',
                 { email, password },
                 { headers: { 'Content-Type': 'application/json' } }
             );
+
+            // show the user token
             console.log(response.data);
-            Alert.alert('Success', 'Login successful!');
+             
+            // Extract the token and store it in the local storage
+            const token = response.data.token
+            console.log(token);
+            await AsyncStorage.setItem('userToken', token)
+
+            // Welcome message
+            Alert.alert('Success', `Welcome Back User ${email}`);
             setPassword('');
             setEmail('');
             router.push("/homePage")
