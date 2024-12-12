@@ -14,6 +14,7 @@ import { StatusBar } from 'expo-status-bar';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useRouter } from 'expo-router';
+import Toast from 'react-native-toast-message';
 
 const { width } = Dimensions.get('window');
 
@@ -79,7 +80,7 @@ const HomePage = () => {
     <View style={styles.container}>
       <SafeAreaView edges={['top']} />
       <StatusBar style="dark" />
-      
+      <Toast/>
       <View style={styles.headerContainer}>
         <View style={styles.headerContent}>
           <Text style={styles.greeting}>Discover Restaurants</Text>

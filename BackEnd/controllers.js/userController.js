@@ -58,7 +58,7 @@ const loginUser = async (req,res)=>{
         }
 
             // generate a token for registered users
-            const token = await generateToken(foundUser._id)
+            const token = generateToken(foundUser._id)
             res.status(200).json({
                 message: "Login successful!",
                 _id:foundUser._id,

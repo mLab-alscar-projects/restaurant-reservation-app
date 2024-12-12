@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import bcrypt from "react-native-bcrypt";
+import bcrypt from "bcrypt";
 import validator from "validator";
 
 // Creating a user schema with signing fields
