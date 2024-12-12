@@ -12,6 +12,7 @@
     "@gorhom/bottom-sheet": "^5.0.6",
     "@react-native-community/datetimepicker": "8.2.0",
     "@react-native-picker/picker": "2.9.0",
+    "axios": "^1.7.9",
     "expo": "~52.0.17",
     "expo-constants": "~17.0.3",
     "expo-linear-gradient": "^14.0.1",
