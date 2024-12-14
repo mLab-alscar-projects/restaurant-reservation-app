@@ -19,13 +19,17 @@ import {
 } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
 import ProfileModal from '../Components/profilemodal';
+import FeedbackForm from '../Components/formmodal';
+import TermsAndConditions from '../Components/policiesmodal';
 
 const ProfileScreen = () => {
   // Hooks
   const router = useRouter();
 
+  // STATES
   const [modalProfile, setModalProfile] = useState(false);
-  
+  const [modalform, setModalform] = useState(false);
+  const [modalpolicies, setModalpolicies] = useState(false);
 
   const [user] = useState({
     name: "Alson",
@@ -68,6 +72,14 @@ const ProfileScreen = () => {
 
   const handleProfile = ()=>{
     setModalProfile(true)
+  }
+
+  const handleForm =()=>{
+    setModalform(true)
+  }
+
+  const handlePolicies = ()=>{
+    setModalpolicies(true)
   }
 
 
@@ -130,7 +142,10 @@ const ProfileScreen = () => {
               }
               if (item.title === "Edit Profile"){
                  handleProfile()
-              }
+              } if (item.title === "Help & Support"){
+                handleForm()
+              } if (item.title === "Privacy & Security")
+                handlePolicies()
             }}
           >
             <View style={styles.menuItemIcon}>
@@ -152,12 +167,28 @@ const ProfileScreen = () => {
           </Pressable>
         ))}
       </ScrollView>
-      
+
       {/* Profile Modal Pop up */}
       {modalProfile && 
       <ProfileModal 
       modalProfile={modalProfile}
       setModalProfile={setModalProfile}/>}
+
+      {
+        modalform && 
+        <FeedbackForm
+        modalform={modalform}
+        setModalform={setModalform}
+        />
+      }
+
+      {
+        modalpolicies && 
+        <TermsAndConditions
+        setModalpolicies={setModalpolicies} 
+        modalpolicies={modalpolicies}
+        />
+      }
     </View>
   );
 };

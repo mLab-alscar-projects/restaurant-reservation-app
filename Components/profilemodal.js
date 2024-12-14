@@ -15,13 +15,6 @@ const ProfileModal = ({ modalProfile, setModalProfile}) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.openButton}
-        onPress={() =>setModalProfile(true)}
-      >
-        <Text style={styles.buttonText}>Open Modal</Text>
-      </TouchableOpacity>
-
       <Modal
         animationType="slide"
         transparent={true}
@@ -61,7 +54,7 @@ const ProfileModal = ({ modalProfile, setModalProfile}) => {
                 style={[styles.button, styles.closeButton]}
                 onPress={() => setModalProfile(false)}
               >
-                <Text style={styles.buttonText}>Close</Text>
+                <Text style={styles.buttonText}>Save</Text>
               </TouchableOpacity>
             </View>
           </View>
