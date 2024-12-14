@@ -1,21 +1,18 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import React, { createContext } from 'react';
+import { StyleSheet, View } from 'react-native';
+import React, { createContext,} from 'react';
 import { Slot } from 'expo-router';
 
-//A context to pass props anywhere in our application
+// A context to pass props anywhere in our application
 export const AppContext = createContext();
 
 export default function App() {
-  const globalProps = { userType: 'guest', theme: 'light' };
+  
 
   return (
-    <AppContext.Provider value={globalProps}>
+    <AppContext.Provider value={{ restaurantsData, setRestaurantsData }}>
       <View style={styles.container}>
-        <StatusBar style="auto" />
-        
-        <Slot /> 
-        
+        <Slot /> {/* Expo Router renders the active page here */}
       </View>
     </AppContext.Provider>
   );
