@@ -19,6 +19,7 @@ import { useRouter } from "expo-router";
 import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import GoogleMap from "./mapPage";
 
 const HomePage = () => {
   // States
@@ -26,6 +27,7 @@ const HomePage = () => {
   const [RestaurantsData, setRestaurantsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [coordinates, setCoordinates] = useState('')
   
   // Hooks
   const router = useRouter();
@@ -51,6 +53,14 @@ const HomePage = () => {
       );
 
       setRestaurantsData(response.data.restaurants || []);
+   
+      //  filtered Coordinates
+      const filteredCordinates = response.data.restaurants.map(
+        (restaurant) => restaurant.coordinates
+      );
+
+      setCoordinates(filteredCordinates);
+
       setError(null);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -69,8 +79,11 @@ const HomePage = () => {
     fetchRestaurants();
   }, []);
 
-  console.log(RestaurantsData)
+  console.log("Details",RestaurantsData.coordinates)
+  
 
+  
+  
   // Render loading state
   if (isLoading) {
     return (
@@ -130,7 +143,14 @@ const HomePage = () => {
           />
           <TouchableOpacity
             style={styles.mapButton}
-            onPress={() => router.push("/mapPage")}
+            onPress={() =>
+              router.push({
+                pathname: "/mapPage",
+                params:{
+                  data: JSON.stringify(RestaurantsData,null,2)
+                }
+              })
+            }
           >
             <Ionicons name="map-outline" size={24} color="#333" />
           </TouchableOpacity>
@@ -199,6 +219,7 @@ const HomePage = () => {
           </View>
         )}
       </ScrollView>
+
     </View>
   );
 };

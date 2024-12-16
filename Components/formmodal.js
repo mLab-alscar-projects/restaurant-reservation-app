@@ -6,160 +6,192 @@ import {
   TouchableOpacity,
   Modal,
   StyleSheet,
+  Animated,
+  Platform,
 } from 'react-native';
 
-const FeedbackForm = ({modalform,setModalform}) => {
- 
+const FeedbackForm = ({ modalform, setModalform }) => {
   const [feedback, setFeedback] = useState('');
   const [description, setDescription] = useState('');
+  const animatedValue = new Animated.Value(0);
+
+  // Animate modal entrance
+  React.useEffect(() => {
+    if (modalform) {
+      Animated.spring(animatedValue, {
+        toValue: 1,
+        friction: 6,
+        tension: 40,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [modalform]);
 
   const handleSubmit = () => {
+    // Add your submit logic here
     console.log({ feedback, description });
-    // Add your submit logic here (e.g., send to an API)
-    setModalVisible(false);
+    setModalform(false);
   };
 
   return (
-    <View style={styles.container}>
-      {/* Open Feedback Form Button */}
-     
-
-      {/* Feedback Form Modal */}
-      <Modal
-        transparent={true}
-        animationType="slide"
-        visible={modalform}
-        onRequestClose={() => setModalform(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Feedback Form</Text>
+    <Modal
+      transparent={true}
+      animationType="fade"
+      visible={modalform}
+      onRequestClose={() => setModalform(false)}
+    >
+      <View style={styles.modalOverlay}>
+        <Animated.View 
+          style={[
+            styles.modalContainer, 
+            {
+              transform: [
+                {
+                  scale: animatedValue.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0.8, 1],
+                  }),
+                },
+              ],
+              opacity: animatedValue.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, 1],
+              }),
+            },
+          ]}
+        >
+          <View style={styles.headerContainer}>
+            <Text style={styles.modalTitle}>Provide Feedback</Text>
             <Text style={styles.modalSubtitle}>
-              We value your feedback. Please share your thoughts or let us know
-              how we can help!
+              Help us improve by sharing your thoughts
             </Text>
+          </View>
 
-            {/* Feedback Type Input */}
+          <View style={styles.inputContainer}>
+            <Text style={styles.inputLabel}>Feedback Type</Text>
             <TextInput
               style={styles.input}
-              placeholder="Feedback Type (e.g., Bug, Suggestion)"
+              placeholder="Bug, Suggestion, Improvement"
+              placeholderTextColor="#a0a0a0"
               value={feedback}
               onChangeText={setFeedback}
             />
 
-            {/* Feedback Description Input */}
+            <Text style={styles.inputLabel}>Description</Text>
             <TextInput
               style={[styles.input, styles.textArea]}
-              placeholder="Describe your issue or feedback"
+              placeholder="Describe your feedback in detail"
+              placeholderTextColor="#a0a0a0"
               value={description}
               onChangeText={setDescription}
               multiline={true}
               numberOfLines={4}
             />
-
-            {/* Buttons */}
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity
-                style={[styles.button, styles.submitButton]}
-                onPress={handleSubmit}
-              >
-                <Text style={styles.buttonText}>Submit</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.button, styles.cancelButton]}
-                onPress={() => setModalform(false)}
-              >
-                <Text style={styles.buttonText}>Cancel</Text>
-              </TouchableOpacity>
-            </View>
           </View>
-        </View>
-      </Modal>
-    </View>
+
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={[styles.button, styles.submitButton]}
+              onPress={handleSubmit}
+            >
+              <Text style={styles.buttonText}>Submit Feedback</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.button, styles.cancelButton]}
+              onPress={() => setModalform(false)}
+            >
+              <Text style={styles.buttonText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </Animated.View>
+      </View>
+    </Modal>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f7f7f7',
-  },
-  openButton: {
-    padding: 15,
-    backgroundColor: '#007BFF',
-    borderRadius: 10,
-  },
-  openButtonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
   modalOverlay: {
     flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    paddingHorizontal: 20,
   },
   modalContainer: {
-    width: '85%',
-    backgroundColor: '#fff',
-    padding: 20,
-    borderRadius: 10,
-    elevation: 5,
+    width: '100%',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    padding: 24,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
     shadowOpacity: 0.2,
     shadowRadius: 5,
+    elevation: 10,
+  },
+  headerContainer: {
+    marginBottom: 24,
+    alignItems: 'center',
   },
   modalTitle: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 10,
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#333',
+    marginBottom: 8,
     textAlign: 'center',
   },
   modalSubtitle: {
-    fontSize: 14,
+    fontSize: 16,
     color: '#666',
-    marginBottom: 20,
     textAlign: 'center',
   },
+  inputContainer: {
+    marginBottom: 24,
+  },
+  inputLabel: {
+    fontSize: 14,
+    color: '#333',
+    marginBottom: 8,
+    fontWeight: '600',
+  },
   input: {
-    height: 50,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 8,
-    marginBottom: 15,
-    paddingLeft: 10,
+    backgroundColor: '#f4f4f4',
+    borderRadius: 10,
+    paddingHorizontal: 16,
+    paddingVertical: Platform.OS === 'ios' ? 12 : 8,
     fontSize: 16,
+    color: '#333',
+    marginBottom: 16,
   },
   textArea: {
-    height: 100,
+    height: 120,
     textAlignVertical: 'top',
+    paddingTop: 12,
   },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 10,
+    gap: 16,
   },
   button: {
     flex: 1,
-    padding: 12,
-    borderRadius: 8,
-    marginHorizontal: 5,
+    paddingVertical: 14,
+    borderRadius: 10,
     alignItems: 'center',
+    justifyContent: 'center',
   },
   submitButton: {
-    backgroundColor: '#28a745',
+    backgroundColor: '#4CAF50',
   },
   cancelButton: {
-    backgroundColor: '#dc3545',
+    backgroundColor: '#F44336',
   },
   buttonText: {
-    color: '#fff',
+    color: '#FFFFFF',
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: '700',
   },
 });
 

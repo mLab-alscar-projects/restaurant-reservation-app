@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -6,154 +6,195 @@ import {
   TouchableOpacity,
   ScrollView,
   StyleSheet,
+  SafeAreaView,
 } from 'react-native';
 
-const TermsAndConditions = ({setModalpolicies,modalpolicies}) => {
- 
+const TermsAndConditions = ({ setModalpolicies, modalpolicies }) => {
   return (
-    <View style={styles.container}>
-      {/* Button to Open Terms & Conditions */}
-      {/* <TouchableOpacity
-        style={styles.openButton}
-        onPress={() => setModalpolicies(true)}
-      >
-        <Text style={styles.openButtonText}>Help & Support</Text>
-      </TouchableOpacity> */}
-
-      {/* Terms and Conditions Modal */}
-      <Modal
-        transparent={true}
-        animationType="slide"
-        visible={modalpolicies}
-        onRequestClose={() => setModalpolicies(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContainer}>
+    <Modal
+      transparent={true}
+      animationType="fade"
+      visible={modalpolicies}
+      onRequestClose={() => setModalpolicies(false)}
+    >
+      <SafeAreaView style={styles.modalOverlay}>
+        <View style={styles.modalContainer}>
+          {/* Header */}
+          <View style={styles.header}>
             <Text style={styles.modalTitle}>Terms and Conditions</Text>
+            <TouchableOpacity 
+              style={styles.closeButton}
+              onPress={() => setModalpolicies(false)}
+            >
+              <Text style={styles.closeButtonText}>×</Text>
+            </TouchableOpacity>
+          </View>
 
-            <ScrollView style={styles.contentContainer}>
-              <Text style={styles.contentText}>
-                Welcome to our application. By using this app, you agree to the
-                following terms and conditions:
-              </Text>
-              <Text style={styles.contentHeading}>1. Use of Service</Text>
-              <Text style={styles.contentText}>
-                You must not misuse this app in any way. This includes
-                attempting to gain unauthorized access or disrupting the app’s
-                functionality.
-              </Text>
-              <Text style={styles.contentHeading}>2. Privacy</Text>
-              <Text style={styles.contentText}>
-                Your privacy is important to us. We ensure that your data is
-                stored securely and used only for the intended purposes.
-              </Text>
-              <Text style={styles.contentHeading}>3. Liability</Text>
-              <Text style={styles.contentText}>
-                We are not liable for any damages or losses resulting from your
-                use of this app.
-              </Text>
-              <Text style={styles.contentHeading}>Help & Support</Text>
-              <Text style={styles.contentText}>
-                For help and support, please contact us at:
-              </Text>
-              <Text style={styles.contactInfo}>Email: support@example.com</Text>
-              <Text style={styles.contactInfo}>Phone: +123 456 7890</Text>
-              <Text style={styles.contactInfo}>Website: www.example.com</Text>
-            </ScrollView>
+          {/* Content */}
+          <ScrollView 
+            style={styles.contentContainer}
+            showsVerticalScrollIndicator={false}
+          >
+            <Text style={styles.introText}>
+              Welcome to our application. Please read these terms carefully before using our service.
+            </Text>
 
-            {/* Buttons */}
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity
-                style={[styles.button, styles.acceptButton]}
-                onPress={() => setModalpolicies(false)}
-              >
-                <Text style={styles.buttonText}>Accept</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.button, styles.declineButton]}
-                onPress={() => setModalpolicies(false)}
-              >
-                <Text style={styles.buttonText}>Decline</Text>
-              </TouchableOpacity>
+            {/* Sections */}
+            {[
+              {
+                title: "1. Use of Service",
+                content: "You must not misuse this app in any way. This includes attempting to gain unauthorized access or disrupting the app's functionality. Responsible and ethical use is expected from all users."
+              },
+              {
+                title: "2. Privacy",
+                content: "Your privacy is paramount. We ensure that your personal data is collected, stored, and used securely, adhering to strict data protection standards and only for the intended purposes of providing our service."
+              },
+              {
+                title: "3. Liability",
+                content: "While we strive to provide the best possible service, we are not liable for any direct, indirect, incidental, or consequential damages arising from your use of this application."
+              }
+            ].map((section, index) => (
+              <View key={index} style={styles.section}>
+                <Text style={styles.sectionTitle}>{section.title}</Text>
+                <Text style={styles.sectionContent}>{section.content}</Text>
+              </View>
+            ))}
+
+            {/* Contact Information */}
+            <View style={styles.contactSection}>
+              <Text style={styles.contactTitle}>Need Help?</Text>
+              <View style={styles.contactDetails}>
+                <Text style={styles.contactText}>📧 support@example.com</Text>
+                <Text style={styles.contactText}>📞 +123 456 7890</Text>
+                <Text style={styles.contactText}>🌐 www.example.com</Text>
+              </View>
             </View>
+          </ScrollView>
+
+          {/* Action Buttons */}
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={[styles.button, styles.declineButton]}
+              onPress={() => setModalpolicies(false)}
+            >
+              <Text style={styles.buttonText}>Decline</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.button, styles.acceptButton]}
+              onPress={() => setModalpolicies(false)}
+            >
+              <Text style={styles.buttonText}>Accept</Text>
+            </TouchableOpacity>
           </View>
         </View>
-      </Modal>
-    </View>
+      </SafeAreaView>
+    </Modal>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f7f7f7',
-  },
-  openButton: {
-    padding: 15,
-    backgroundColor: '#007BFF',
-    borderRadius: 10,
-  },
-  openButtonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
   modalOverlay: {
     flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContainer: {
-    width: '90%',
-    height: '70%',
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 20,
-    elevation: 5,
+    width: '92%',
+    height: '85%',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 15,
+    overflow: 'hidden',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
     shadowRadius: 5,
+    elevation: 10,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    backgroundColor: '#f4f4f4',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0',
   },
   modalTitle: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 15,
-    textAlign: 'center',
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#333',
+  },
+  closeButton: {
+    padding: 10,
+  },
+  closeButtonText: {
+    fontSize: 30,
+    color: '#999',
   },
   contentContainer: {
-    flex: 1,
-    marginBottom: 20,
+    paddingHorizontal: 20,
+    marginTop: 10,
   },
-  contentText: {
-    fontSize: 14,
-    color: '#333',
-    lineHeight: 22,
-    marginBottom: 15,
-  },
-  contentHeading: {
+  introText: {
     fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    color: '#555',
+    color: '#666',
+    marginBottom: 20,
+    textAlign: 'center',
+    fontStyle: 'italic',
   },
-  contactInfo: {
-    fontSize: 14,
-    color: '#007BFF',
+  section: {
+    marginBottom: 20,
+    backgroundColor: '#f9f9f9',
+    borderRadius: 10,
+    padding: 15,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#333',
+    marginBottom: 10,
+  },
+  sectionContent: {
+    fontSize: 15,
+    color: '#666',
+    lineHeight: 22,
+  },
+  contactSection: {
+    backgroundColor: '#f0f0f0',
+    borderRadius: 10,
+    padding: 15,
+    marginTop: 10,
+  },
+  contactTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#333',
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  contactDetails: {
+    alignItems: 'center',
+  },
+  contactText: {
+    fontSize: 15,
+    color: '#007bff',
     marginBottom: 5,
   },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    padding: 15,
+    backgroundColor: '#f4f4f4',
+    borderTopWidth: 1,
+    borderTopColor: '#e0e0e0',
   },
   button: {
     flex: 1,
-    padding: 12,
-    borderRadius: 8,
-    marginHorizontal: 5,
+    paddingVertical: 15,
+    marginHorizontal: 10,
+    borderRadius: 10,
     alignItems: 'center',
   },
   acceptButton: {
@@ -163,9 +204,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#dc3545',
   },
   buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: '700',
   },
 });
 
