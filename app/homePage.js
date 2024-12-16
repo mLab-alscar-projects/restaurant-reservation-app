@@ -33,6 +33,13 @@ const HomePage = () => {
   const router = useRouter();
 
  
+  // Functions
+
+  // Search function
+  const handleSearch = (query) => {
+    setSearchQuery(query)
+  };
+  
 
   const fetchRestaurants = async () => {
     try {
@@ -79,9 +86,12 @@ const HomePage = () => {
     fetchRestaurants();
   }, []);
 
-  console.log("Details",RestaurantsData.coordinates)
-  
+  // logs for debugging
 
+  // filtering data restaurants based on the name of the restaurant
+  const filteredRestaurants = RestaurantsData.filter((restaurant)=>
+  restaurant.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
   
   
   // Render loading state
@@ -138,7 +148,7 @@ const HomePage = () => {
             style={styles.searchInput}
             placeholder="Find your perfect dining spot"
             value={searchQuery}
-            onChangeText={setSearchQuery}
+            onChangeText={handleSearch}
             placeholderTextColor="#888"
           />
           <TouchableOpacity
@@ -157,14 +167,14 @@ const HomePage = () => {
         </View>
       </View>
 
-      {/* Rest of your existing code remains the same */}
 
+     {/* Restaurents Container */}
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollViewContent}
       >
-        {RestaurantsData.length > 0 ? (
-          RestaurantsData.map((restaurant) => (
+        {filteredRestaurants.length > 0 ? (
+          filteredRestaurants.map((restaurant) => (
             <TouchableOpacity
               key={restaurant._id}
               style={[
@@ -224,6 +234,8 @@ const HomePage = () => {
   );
 };
 
+
+// Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -370,5 +382,6 @@ const styles = StyleSheet.create({
     color: "#666",
   },
 });
+// End 
 
 export default HomePage;
