@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { 
   StyleSheet, 
   Text, 
@@ -7,13 +7,15 @@ import {
   Pressable, 
   Image, 
   Dimensions, 
-  Alert 
+  ActivityIndicator
 } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useLocalSearchParams  } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 // ICONS
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import PeopleTimeDate from '../Components/toggles';
+import ReservationPicker from '../Components/toggles.js';
 
 
 // SCREEN DIMENSIONS
@@ -22,68 +24,87 @@ const { width } = Dimensions.get('window');
 const ReservationPage = () => {
 
 // States
-  const [selectedDateTime, setselectedDateTime] = useState(new Date())
-  const [selectedValue, setSelectedValue] = useState(1);
+  const [selectedDateTime, setSelectedDateTime] = useState(new Date());
+  const [selectedPeople, setSelectedPeople] = useState(2);
+  const [menuData, setMenuData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const { restaurant } = useLocalSearchParams ();
+  const restaurantData = restaurant ? JSON.parse(restaurant) : null;
 
-
-  // functions to update state
-  const handleChange = (event, date) => {
-    if (date) {
-      const selectedDate = date.toDateString(); // Extract the date
-      const selectedTime = date.toTimeString(); // Extract the time (HH:MM:SS)
-      console.log('Date:', selectedDate);
-      console.log('Time:', selectedTime);
-      setselectedDateTime(date);
-      
+  // FETCH MENU
+  useEffect(() => {
+    const fetchMenu = async () => {
+      setIsLoading(true);
+  
+      try {
+        const token = await AsyncStorage.getItem('userToken');
+        console.log("Token:", token);
+  
+        const response = await axios.get(
+          `https://acrid-street-production.up.railway.app/api/v2/restaurants/${restaurantData._id}/menu`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+  
+        setMenuData(response.data.menuItems);
+      } catch (error) {
+        console.error("ERROR FETCHING MENU:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+  
+    if (restaurantData) {
+      fetchMenu();
     }
-  };
+  }, []);
+  
 
   // Function to navigate
   const handleCheckout= ()=>{
       router.push({
         pathname: "./checkoutPage",
-        params:{selectedValue,selectedDateTime}
+        params:{selectedPeople,selectedDateTime, name: restaurantData.name, location: restaurantData.location, timeslot: restaurantData.timeslot}
       })
-      console.log("number",selectedValue)
-      console.log("date", selectedDateTime)
   }
   
  
-  // MOCK MENU DATA
-  const menuData = [
-    { id: '1', name: 'Grilled Chicken', price: 'R62.99', image: require('../assets/chicken.jpg') },
-    { id: '2', name: 'Vegan Salad', price: 'R58.99', image: require('../assets/salad.jpg') },
-    { id: '3', name: 'Pasta Carbonara', price: 'R84.49', image: require('../assets/pasta.jpg') },
-    { id: '4', name: 'Cheeseburger Small', price: 'R99.99', image: require('../assets/Burger.jpg') },
-    { id: '5', name: 'Cheeseburger Extra', price: 'R99.99', image: require('../assets/Burger.jpg') },
-    { id: '6', name: 'Cheeseburger Normal', price: 'R99.99', image: require('../assets/Burger.jpg') },
-    { id: '7', name: 'Cheeseburger Hot', price: 'R99.99', image: require('../assets/Burger.jpg') },
-  ];
-
-
-
-
-
+  // RENDER LOADING INDICATOR
+  if (isLoading) {
+    return (
+      <View style={[styles.loadingContainer, { backgroundColor: '#f4f7fa' }]}>
+        <ActivityIndicator 
+          size="large" 
+          color={restaurantData.color || '#000'}
+        />
+      </View>
+    );
+  }
   
 // Beginning of rendered Components
   return (  
     <View style={styles.container}>
       
       {/* HEADER */}
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Foodies' Delight</Text>
+      <View style={[styles.header, {backgroundColor: restaurantData.color}]}>
+        <Text style={styles.headerTitle}>{restaurantData.name}</Text>
       </View>
 
 
       {/* DATE TIME PEOPLE COMPONENT FROM UTILS WITH PROPS PASSED*/}
-      <PeopleTimeDate
-      selectedDateTime={selectedDateTime}
-      setselectedDateTime={setselectedDateTime}
-      selectedValue={selectedValue}
-      setSelectedValue={setSelectedValue}
-      handleChange ={handleChange}
+      <View style={styles.dateTimeContainer}>
+      <ReservationPicker
+        selectedDateTime={selectedDateTime}
+        setSelectedDateTime={setSelectedDateTime}
+        selectedPeople={selectedPeople}
+        setSelectedPeople={setSelectedPeople}
+        accentColor={restaurantData.color} 
       />
+      </View>
 
 
 
@@ -94,11 +115,13 @@ const ReservationPage = () => {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={styles.menuCard}>
-            <Image source={item.image} style={styles.menuImage} />
+            <View style={styles.imageCover}>
+              <Image source={{uri: item.image}} style={styles.menuImage} />
+            </View>
             <View style={styles.menuDetails}>
               <Text style={styles.menuName}>{item.name}</Text>
               <Text style={styles.menuPrice}>{item.price}</Text>
-              <Text style={styles.menuPrice}>{item.price}</Text>
+              <Text style={[styles.menuPrice, {color: item.isActive ? '#2ecc71' : '#e74b4b'}]}>{item.isActive ? 'Avilable' : 'Out of stock'}</Text>
             </View>
           </View>
         )}
@@ -108,7 +131,7 @@ const ReservationPage = () => {
 
       {/* ADD MORE MENU BUTTON */}
       <View style={styles.addButtonWrapper}>
-        <Pressable style={styles.addButton} onPress={handleCheckout}>
+        <Pressable style={[styles.addButton, {backgroundColor: restaurantData.color}]} onPress={handleCheckout}>
           <Text style={styles.addButtonText}>Reserve</Text>
         </Pressable>
       </View>
@@ -124,6 +147,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f4f7fa',
+  },
+
+  loadingContainer: 
+  {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   // HEADER STYLES
@@ -149,7 +179,7 @@ const styles = StyleSheet.create({
   menuCard: {
     flexDirection: 'row',
     backgroundColor: '#ffffff',
-    borderRadius: 10,
+    borderRadius: 5,
     overflow: 'hidden',
     marginBottom: 10,
     shadowColor: '#000',
@@ -160,8 +190,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
+  imageCover: {
+    width: 150,
+    height: 100,
+  },
+  
   menuImage: {
-    width: 80,
+    width: '100%',
     height: '100%',
   },
 
@@ -237,6 +272,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textTransform: 'uppercase',
   },
+
+  dateTimeContainer:
+  {
+    paddingBottom: 10
+  }
 });
 
 export default ReservationPage;

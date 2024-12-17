@@ -5,7 +5,7 @@ export default function RootLayout(){
     return (
     <Stack
     screenOptions={{
-      headerShown: true,
+      headerShown: false,
     }}>
       <Stack.Screen
         name="loginPage"
@@ -35,11 +35,54 @@ export default function RootLayout(){
       />
 
       <Stack.Screen
-        name="splashScreen"
+        name="checkoutPage"
+        options={{
+          headerShown: true,
+          headerTitle: 'Payment', 
+          headerStyle: {
+            backgroundColor: '#3498db', 
+          },
+          headerTitleStyle: {
+            color: '#fff', 
+            fontSize: 18,
+            fontWeight: 'bold',
+            letterSpacing: 1
+          },
+          headerTintColor: '#000', 
+        }}
+      />
+
+      <Stack.Screen
+        name="paymentPage"
         options={{
           headerShown: false, 
         }}
       />
+
+      <Stack.Screen
+        name="mapPage"
+        options={{
+          headerShown: true,
+          headerTitle: 'Maps', 
+          headerStyle: {
+            backgroundColor: '#3498db', 
+          },
+          headerTitleStyle: {
+            color: '#fff', 
+            fontSize: 18,
+            fontWeight: 'bold',
+            letterSpacing: 1
+          },
+          headerTintColor: '#000', 
+        }}
+      />
+
+      {/* <Stack.Screen
+        name="checkoutPage"
+        options={{
+          headerShown: false, 
+        }}
+      /> */}
       <Stack.Screen
         name="profilePage"
         options={{
@@ -63,10 +106,10 @@ export default function RootLayout(){
           headerShown: true,
           headerTitle: 'Reservations', 
           headerStyle: {
-            backgroundColor: '#3498db', 
+            backgroundColor: '#d3ddda', 
           },
           headerTitleStyle: {
-            color: '#fff', 
+            color: '#333', 
             fontSize: 18,
             fontWeight: 'bold',
             letterSpacing: 1
