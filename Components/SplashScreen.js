@@ -9,7 +9,6 @@ const SplashScreenChild = () => {
     <View style={styles.Parent}>
         <View style={styles.firstChild}>
             <Image source={require('../assets/splashIcon.jpg')} style={styles.image} />
-            <Text style={styles.Text}>Alscar Tables</Text>
         </View>
     </View>
   );

@@ -7,7 +7,6 @@ import SplashScreenChild from '../Components/SplashScreen';
 
 // ICONS
 import Zocial from 'react-native-vector-icons/Zocial';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 
 
@@ -23,7 +22,9 @@ const ResetPage = () => {
             <View style={styles.siblingreset}>
                 <SplashScreenChild />
             </View>
-            <View style={styles.skewedBottomreset} />
+            <View style={styles.skewedBottomreset} >
+                <Text style={styles.Text}>Alscar Tables</Text>
+            </View>
         </View>
         {/* ENDS */}
 
