@@ -1,5 +1,5 @@
 import express  from "express";
-import { loginUser,registerUser,updateProfile } from "../controllers.js/userController.js";
+import { getProfile, loginUser,registerUser,updateProfile } from "../controllers.js/userController.js";
 import protect from "../Middleware/protect.js";
 import getUsers from "../controllers.js/getUsers.js";
 
@@ -11,6 +11,8 @@ router.post("/user/login", loginUser);
 router.post("/user/register", registerUser)
 
 router.put("/update-profile",  protect, updateProfile)
+
+router.get("/get-profile", protect, getProfile)
 
 router.get("/users", getUsers)
 
