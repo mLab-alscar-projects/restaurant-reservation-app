@@ -13,8 +13,8 @@ const PaymentSummaryPage = () => {
 
   // PAYMENT DATA
   const paymentDetails = {
-    name: "John Doe",
-    email: "johndoe@example.com",
+    name: "John Doe", // I WILL LEAVE THIS TO YOU TO WORK ON IT
+    email: "johndoe@example.com", // I WILL LEAVE THIS TO YOU TO WORK ON IT
     dateOfPayment: selectedDateTime,
     numberOfTables: selectedPeople,
     restaurantName: name,
@@ -51,8 +51,8 @@ const PaymentSummaryPage = () => {
 
         <DetailRow label="Name" value={paymentDetails.name} />
         <DetailRow label="Email" value={paymentDetails.email} />
-        <DetailRow label="Date and Time of Payment" value={paymentDetails.dateOfPayment} />
-        <DetailRow label="Number of Tables" value={paymentDetails.numberOfTables} />
+        <DetailRow label="Date and Time" value={paymentDetails.dateOfPayment} />
+        <DetailRow label="Number of People" value={paymentDetails.numberOfTables} />
         <DetailRow label="Restaurant Name" value={paymentDetails.restaurantName} />
         <DetailRow label="Working Hours" value={paymentDetails.timeslot} />
         <DetailRow label="Location" value={paymentDetails.location} />
