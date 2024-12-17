@@ -1,27 +1,42 @@
 import React, { useState } from 'react';
-import { Text, View, Pressable, TextInput, Alert } from 'react-native';
+import { Text, View, Pressable, TextInput, ActivityIndicator } from 'react-native';
+
+// STYLES
 import styles from '../StylesSheet/styles';
+import Toast from 'react-native-toast-message';
+// ENDS
+
+// ROUTER
 import { useRouter } from 'expo-router';
+// ENDS
+
+// BACKEND CONNECTIONS
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+// ENDS
+
 // SCREENS
 import SplashScreenChild from '../Components/SplashScreen';
 
 // ICONS
 import Zocial from 'react-native-vector-icons/Zocial';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+// ENDS
 
 const LoginPage = () => {
     // States
     const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [showPassword, setShowPassword] = useState(false); // For toggling password visibility
+    const [showPassword, setShowPassword] = useState(false); 
+    const [isLoading, setIsLoading] = useState(false);
   
     // Function
     const handleLogin = async () => {
+
+        setIsLoading(true);
         try {
-            // Login the user
             const response = await axios.post(
                 'https://lumpy-clover-production.up.railway.app/api/user/login',
                 { email, password },
@@ -33,17 +48,31 @@ const LoginPage = () => {
              
             // Extract the token and store it in the local storage
             const token = response.data.token
-            // console.log(token);
-            await AsyncStorage.setItem('userToken', token)
+           
+            await AsyncStorage.setItem('userToken', token);
 
             // Welcome message
-            Alert.alert('Success', `Welcome Back User ${email}`);
+            Toast.show({
+                type: 'success', 
+                text1: `Welcome back, ${email}!`,
+                text2: 'You have successfully logged in.',
+                position: 'bottom',
+              });
             setPassword('');
             setEmail('');
             router.push("/homePage")
         } catch (error) {
             console.error(error);
-            Alert.alert('Error', error.response?.data?.message || 'Login failed. Please try again.');
+            Toast.show({
+                type: 'error', 
+                text1: `Login failed. Please try again.`,
+                text2: error.response?.data?.message,
+                position: 'bottom',
+              });
+            
+        } finally
+        {
+            setIsLoading(false);
         }
     }
 
@@ -55,7 +84,9 @@ const LoginPage = () => {
                 <View style={styles.siblinglogin}>
                     <SplashScreenChild />
                 </View>
-                <View style={styles.skewedBottomlogin} />
+                <View style={styles.skewedBottomlogin}>
+                    <Text style={styles.Text}>Alscar Tables</Text>
+                </View>
             </View>
 
             {/* SECOND CHILD */}
@@ -83,17 +114,19 @@ const LoginPage = () => {
                         style={styles.inputlogin}
                         value={password}
                         onChangeText={setPassword}
-                        secureTextEntry={!showPassword} // Toggle visibility
+                        secureTextEntry={!showPassword}
                     />
-                    <Pressable onPress={() => setShowPassword(!showPassword)}>
-                        <Text style={styles.togglePasswordText}>Show/Hide</Text>
+                    <Pressable style={styles.eye} onPress={() => setShowPassword(!showPassword)}>
+                        <Text style={styles.togglePasswordText}>
+                            <MaterialCommunityIcons name= {showPassword ? 'eye-off' : 'eye'}  size={25} color={'rgba(0, 0, 0,.5)'}/>
+                        </Text>
                     </Pressable>
                 </View>
 
                 {/* BUTTON */}
                 <View style={styles.buttonWrapperlogin}>
                     <Pressable style={styles.buttonlogin} onPress={handleLogin}> 
-                        <Text style={styles.buttonTextlogin}>Login</Text>
+                        <Text style={styles.buttonTextlogin}>{isLoading ? <ActivityIndicator size={'small'} color={'#333'}/> : "Login"}</Text> 
                     </Pressable>
                 </View>
 

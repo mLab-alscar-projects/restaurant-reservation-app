@@ -61,18 +61,6 @@ const ReservationPage = () => {
     { id: '7', name: 'Cheeseburger Hot', price: 'R99.99', image: require('../assets/Burger.jpg') },
   ];
 
-  // Handle Edit Button Press
-  const handleEdit = (item) => {
-    Alert.alert('Edit Menu', `Edit ${item.name}`);
-  };
-
-  // Handle Delete Button Press
-  const handleDelete = (item) => {
-    Alert.alert('Delete Menu', `Are you sure you want to delete ${item.name}?`, [
-      { text: 'Cancel', style: 'cancel' },
-      { text: 'Delete', style: 'destructive', onPress: () => console.log(`${item.name} deleted`) },
-    ]);
-  };
 
 
 
@@ -110,8 +98,7 @@ const ReservationPage = () => {
             <View style={styles.menuDetails}>
               <Text style={styles.menuName}>{item.name}</Text>
               <Text style={styles.menuPrice}>{item.price}</Text>
-            </View>
-            <View style={styles.actionButtons}>
+              <Text style={styles.menuPrice}>{item.price}</Text>
             </View>
           </View>
         )}
@@ -175,7 +162,7 @@ const styles = StyleSheet.create({
 
   menuImage: {
     width: 80,
-    height: 80,
+    height: '100%',
   },
 
   menuDetails: {

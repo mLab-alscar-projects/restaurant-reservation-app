@@ -111,7 +111,7 @@ lastChild:
   firstChildlogin: 
   {
       width: '100%',
-      height: "40%",
+      height: "30%",
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: '#97CBDC',
@@ -130,19 +130,32 @@ lastChild:
   {
       position: 'absolute',
       bottom: -25,
-      width: "100%",
+      width: "105%",
       height: 50,
-      backgroundColor: '#F9F9F9',
-      transform: [{ rotate: '-2deg' }], 
-    //   borderBottomLeftRadius: 10, 
-    //   borderBottomRightRadius: 10,
+      backgroundColor: '#97CBDC',
+      transform: [{ rotate: '-8deg' }], 
       zIndex: 10
     },
+
+    // TEXT
+   Text: 
+   {
+       fontSize: 24,
+       letterSpacing: 3,
+       fontWeight: 'bold',
+       textTransform: 'uppercase',
+       width: '100%',
+       textAlign: 'center',
+       color: '#231934',
+       // transform: [{ rotate: '-8deg' }], 
+   },
+
+   // ENDS
 
   secondChildlogin: 
   {
       width: '100%',
-      height: "60%",
+      height: "70%",
       paddingHorizontal: 40,
       justifyContent: 'center',
       alignItems: 'center',
@@ -181,7 +194,6 @@ lastChild:
       color: 'rgba(0, 0, 0,.5)',
       borderColor: 'rgba(0, 0, 0,.5)',
       width: "100%",
-      height: 35,
 
   },
   
@@ -238,6 +250,13 @@ forgottenPasswordTextlogin:
       letterSpacing: 1,
   },
 
+  eye:
+  {
+    position: 'absolute',
+    right: 10,
+    bottom: 25
+  },
+
 
 // PARENT REGISTER
 Parentregister: 
@@ -256,7 +275,7 @@ Parentregister:
 firstChildregister: 
   {
       width: '100%',
-      height: "40%",
+      height: "30%",
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: '#97CBDC',
@@ -277,12 +296,10 @@ skewedBottomregister:
   {
     position: 'absolute',
       bottom: -25,
-      width: "100%",
+      width: "105%",
       height: 50,
-      backgroundColor: '#F9F9F9',
-      transform: [{ rotate: '-2deg' }], 
-    //   borderBottomLeftRadius: 10, 
-    //   borderBottomRightRadius: 10,
+      backgroundColor: '#97CBDC',
+      transform: [{ rotate: '-8deg' }], 
       zIndex: 10
     },
 
@@ -290,7 +307,7 @@ skewedBottomregister:
 secondChildregister: 
   {
       width: '100%',
-      height: "60%",
+      height: "70%",
       paddingHorizontal: 40,
       justifyContent: 'center',
       alignItems: 'center',
@@ -332,7 +349,7 @@ inputregister:
       color: 'rgba(0, 0, 0,.5)',
       borderColor: 'rgba(0, 0, 0,.5)',
       width: "100%",
-      height: 35,
+      height: 50,
 
   },
 
@@ -387,7 +404,7 @@ Parentreset:
 firstChildreset: 
   {
       width: '100%',
-      height: "40%",
+      height: "30%",
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: '#97CBDC',
@@ -408,12 +425,10 @@ skewedBottomreset:
   {
     position: 'absolute',
       bottom: -25,
-      width: "100%",
+      width: "105%",
       height: 50,
-      backgroundColor: '#F9F9F9',
-      transform: [{ rotate: '-2deg' }], 
-    //   borderBottomLeftRadius: 10, 
-    //   borderBottomRightRadius: 10,
+      backgroundColor: '#97CBDC',
+      transform: [{ rotate: '-8deg' }], 
       zIndex: 10
     },
 
@@ -421,7 +436,7 @@ skewedBottomreset:
 secondChildreset: 
   {
       width: '100%',
-      height: "60%",
+      height: "70%",
       paddingHorizontal: 40,
       justifyContent: 'center',
       alignItems: 'center',
