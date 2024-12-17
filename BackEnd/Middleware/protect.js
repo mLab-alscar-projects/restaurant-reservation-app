@@ -12,7 +12,7 @@ const protect = async (req, res, next) => {
             token = req.headers.authorization.split(" ")[1];
 
             // Verify the token using jwt.verify
-            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            const decoded = jwt.verify(token, "mySecretKey");
 
             // Find the user by ID and exclude the password field
             req.user = await User.findById(decoded.id).select("-password");

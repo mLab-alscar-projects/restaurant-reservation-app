@@ -23,6 +23,7 @@ import FeedbackForm from '../Components/formmodal';
 import TermsAndConditions from '../Components/policiesmodal';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Alert } from 'react-native';
 
 const ProfileScreen = () => {
   // Hooks
