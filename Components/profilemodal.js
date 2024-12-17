@@ -2,23 +2,20 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Modal, StyleSheet, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-const ProfileModal = ({ modalProfile, setModalProfile, onSubmit }) => {
-  const [name, setName] = useState('');
-  const [surname, setSurname] = useState('');
-  const [number, setNumber] = useState('');
+const ProfileModal = ({ modalProfile, setModalProfile, onSubmit,name,setName,phoneNumber,setphoneNumber,EditNameandPhone }) => {
+  
 
-  const handleSubmit = () => {
-    // Validate inputs before submission
-    if (name.trim() && surname.trim() && number.trim()) {
-      const profileData = { name, surname, number };
-      onSubmit(profileData);
-      setModalProfile(false);
-      // Reset form
-      setName('');
-      setSurname('');
-      setNumber('');
-    }
-  };
+  // const handleSubmit = () => {
+  //   // Validate inputs before submission
+  //   if (name.trim() && surname.trim() && number.trim()) {
+  //     const profileData = { name, phoneNumber};
+  //     onSubmit(profileData);
+  //     setModalProfile(false);
+  //     // Reset form
+  //     setName('');
+  //     setNumber('');
+  //   }
+  // };
 
   return (
     <Modal
@@ -39,6 +36,7 @@ const ProfileModal = ({ modalProfile, setModalProfile, onSubmit }) => {
           <Text style={styles.modalTitle}>Create Profile</Text>
           <Text style={styles.modalSubtitle}>Enter your personal details</Text>
 
+         {/* Fields for input */}
           <View style={styles.inputContainer}>
             <Ionicons name="person-outline" size={20} color="#666" style={styles.inputIcon} />
             <TextInput
@@ -50,26 +48,15 @@ const ProfileModal = ({ modalProfile, setModalProfile, onSubmit }) => {
               placeholderTextColor="#999"
             />
           </View>
-
-          <View style={styles.inputContainer}>
-            <Ionicons name="person-outline" size={20} color="#666" style={styles.inputIcon} />
-            <TextInput
-              style={styles.input}
-              placeholder="Last Name"
-              value={surname}
-              onChangeText={setSurname}
-              autoCapitalize="words"
-              placeholderTextColor="#999"
-            />
-          </View>
-
+         
+         {/* Fields for input */}
           <View style={styles.inputContainer}>
             <Ionicons name="call-outline" size={20} color="#666" style={styles.inputIcon} />
             <TextInput
               style={styles.input}
               placeholder="Phone Number"
-              value={number}
-              onChangeText={setNumber}
+              value={phoneNumber}
+              onChangeText={setphoneNumber}
               keyboardType="phone-pad"
               placeholderTextColor="#999"
             />
@@ -77,9 +64,9 @@ const ProfileModal = ({ modalProfile, setModalProfile, onSubmit }) => {
 
           <TouchableOpacity 
             style={styles.submitButton} 
-            onPress={handleSubmit}
+            onPress={EditNameandPhone}
           >
-            <Text style={styles.submitButtonText}>Save Profile</Text>
+            <Text style={styles.submitButtonText} >Save Profile</Text>
             <Ionicons name="checkmark-circle" size={24} color="white" />
           </TouchableOpacity>
         </View>

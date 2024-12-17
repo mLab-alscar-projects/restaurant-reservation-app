@@ -21,6 +21,8 @@ import { useRouter } from 'expo-router';
 import ProfileModal from '../Components/profilemodal';
 import FeedbackForm from '../Components/formmodal';
 import TermsAndConditions from '../Components/policiesmodal';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ProfileScreen = () => {
   // Hooks
@@ -30,7 +32,9 @@ const ProfileScreen = () => {
   const [modalProfile, setModalProfile] = useState(false);
   const [modalform, setModalform] = useState(false);
   const [modalpolicies, setModalpolicies] = useState(false);
-
+  const [name, setName] = useState('');
+  const [phoneNumber, setphoneNumber] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
   const [user] = useState({
     name: "Alson",
     email: "oscar@gmail.com",
@@ -41,6 +45,45 @@ const ProfileScreen = () => {
     loyaltyPoints: 560
   });
 
+
+  // Functions
+  const EditNameandPhone = async () => {
+    try {
+      setIsLoading(true);
+      const token = await AsyncStorage.getItem("userToken");
+  
+      if (!token) {
+        throw new Error("No token found");
+      }
+  
+      console.log("Token Retrieved:", token);
+  
+      const response = await axios.put(
+        "https://lumpy-clover-production.up.railway.app/api/update-profile",
+        { name, phoneNumber },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      if (response.status === 200) {
+        Alert.alert("Success", "Profile updated successfully!");
+        console.log("Updated Data:", response.data);
+      } else {
+        throw new Error("Failed to update profile");
+      }
+    } catch (error) {
+      console.error("Error updating profile:", error.message);
+      Alert.alert("Error", error.message || "Unauthorized: Please log in again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
+ 
+//  Buttons Array
   const menuItems = [
     {
       title: "Edit Profile",
@@ -172,7 +215,13 @@ const ProfileScreen = () => {
       {modalProfile && 
       <ProfileModal 
       modalProfile={modalProfile}
-      setModalProfile={setModalProfile}/>}
+      setModalProfile={setModalProfile}
+      name={name}
+      setName={setName}
+      phoneNumber={phoneNumber}
+      setphoneNumber={setphoneNumber}
+      EditNameandPhone ={EditNameandPhone}
+      />}
 
       {
         modalform && 
@@ -193,7 +242,6 @@ const ProfileScreen = () => {
   );
 };
 // END
-
 
 
 // Styles
