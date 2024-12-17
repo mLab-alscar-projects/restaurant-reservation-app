@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { 
   StyleSheet, 
   Text, 
@@ -7,12 +7,12 @@ import {
   Pressable, 
   Image, 
   Dimensions, 
-  Alert 
 } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useLocalSearchParams  } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // ICONS
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import PeopleTimeDate from '../Components/toggles';
 
 
@@ -22,9 +22,52 @@ const { width } = Dimensions.get('window');
 const ReservationPage = () => {
 
 // States
-  const [selectedDateTime, setselectedDateTime] = useState(new Date())
+  const [selectedDateTime, setselectedDateTime] = useState(new Date());
   const [selectedValue, setSelectedValue] = useState(1);
+  const [menuData, setMenuData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const { restaurant } = useLocalSearchParams ();
+  const restaurantData = restaurant ? JSON.parse(restaurant) : null;
+
+  // FETCH MENU
+  // FETCH MENU DATA ON COMPONENT MOUNT
+  useEffect(() => {
+    const fetchMenu = async () => {
+      // RESET LOADING AND ERROR STATES
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        // RETRIEVE AUTH TOKEN
+        const token = await AsyncStorage.getItem('token');
+        
+        // FETCH MENU ITEMS
+        const response = await axios.get(
+          `https://acrid-street-production.up.railway.app/api/v2/restaurants/${restaurantData._id}/menu`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        
+        // UPDATE MENU DATA
+        setMenuData(response.data.menuItems);
+      } catch (error) {
+        // SET ERROR STATE IF FETCHING FAILS
+        console.error("ERROR FETCHING MENU:", error);
+        setError('Failed to load menu items');
+      } finally {
+        // STOP LOADING INDICATOR
+        setIsLoading(false);
+      }
+    };
+
+    fetchMenu();
+  }, [restaurantData._id]);
+
+  console.log('My data' , restaurant);
 
 
   // functions to update state
@@ -45,21 +88,12 @@ const ReservationPage = () => {
         pathname: "./checkoutPage",
         params:{selectedValue,selectedDateTime}
       })
-      console.log("number",selectedValue)
+      console.log("number",selectedValue);
       console.log("date", selectedDateTime)
   }
   
  
-  // MOCK MENU DATA
-  const menuData = [
-    { id: '1', name: 'Grilled Chicken', price: 'R62.99', image: require('../assets/chicken.jpg') },
-    { id: '2', name: 'Vegan Salad', price: 'R58.99', image: require('../assets/salad.jpg') },
-    { id: '3', name: 'Pasta Carbonara', price: 'R84.49', image: require('../assets/pasta.jpg') },
-    { id: '4', name: 'Cheeseburger Small', price: 'R99.99', image: require('../assets/Burger.jpg') },
-    { id: '5', name: 'Cheeseburger Extra', price: 'R99.99', image: require('../assets/Burger.jpg') },
-    { id: '6', name: 'Cheeseburger Normal', price: 'R99.99', image: require('../assets/Burger.jpg') },
-    { id: '7', name: 'Cheeseburger Hot', price: 'R99.99', image: require('../assets/Burger.jpg') },
-  ];
+ 
 
 
 
@@ -71,8 +105,8 @@ const ReservationPage = () => {
     <View style={styles.container}>
       
       {/* HEADER */}
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Foodies' Delight</Text>
+      <View style={[styles.header, {backgroundColor: restaurantData.color}]}>
+        <Text style={styles.headerTitle}>{restaurantData.name}</Text>
       </View>
 
 
@@ -108,7 +142,7 @@ const ReservationPage = () => {
 
       {/* ADD MORE MENU BUTTON */}
       <View style={styles.addButtonWrapper}>
-        <Pressable style={styles.addButton} onPress={handleCheckout}>
+        <Pressable style={[styles.addButton, {backgroundColor: restaurantData.color}]} onPress={handleCheckout}>
           <Text style={styles.addButtonText}>Reserve</Text>
         </Pressable>
       </View>
