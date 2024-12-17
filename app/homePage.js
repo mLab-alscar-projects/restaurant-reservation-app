@@ -5,12 +5,13 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity,
-  // Image,
+  Image,
   StyleSheet,
   Dimensions,
   ActivityIndicator,
+  Pressable
 } from "react-native";
-import { Image } from 'expo-image';
+// import { Image } from 'expo-image';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -204,7 +205,7 @@ const HomePage = () => {
     >
       {filteredRestaurants.length > 0 ? (
         filteredRestaurants.map((restaurant, index) => (
-          <TouchableOpacity
+          <Pressable
             key={index}
             style={[
               styles.restaurantCard,
@@ -218,9 +219,8 @@ const HomePage = () => {
             }
           >
             <Image
-              source={restaurant.image}
+              source={{uri: restaurant.image}}
               style={styles.restaurantImage}
-              placeholder={require('../assets/Munchies.jpg')}
               contentFit="cover"
             />
             <View style={styles.restaurantDetails}>
@@ -274,7 +274,7 @@ const HomePage = () => {
                 <Text style={styles.cuisineText}>{restaurant.cuisine}</Text>
               </View>
             </View>
-          </TouchableOpacity>
+          </Pressable>
         ))
       ) : (
         <View style={styles.noRestaurantsContainer}>
@@ -294,7 +294,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F7F7F7",
   },
   headerContainer: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
     paddingTop: 10,
     paddingBottom: 15,
     backgroundColor: "#F7F7F7",
@@ -335,7 +335,7 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   scrollViewContent: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
     paddingBottom: 20,
   },
   restaurantCard: {
@@ -349,6 +349,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
     borderLeftWidth: 5,
+    width: '100%'
   },
   restaurantImage: {
     width: "100%",
