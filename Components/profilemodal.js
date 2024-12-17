@@ -1,133 +1,161 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Modal, StyleSheet, Platform } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
-const ProfileModal = ({ modalProfile, setModalProfile}) => {
- 
+const ProfileModal = ({ modalProfile, setModalProfile, onSubmit }) => {
   const [name, setName] = useState('');
   const [surname, setSurname] = useState('');
   const [number, setNumber] = useState('');
 
   const handleSubmit = () => {
-    // Handle form submission
-    console.log({ name, surname, number });
-    setModalVisible(false);
+    // Validate inputs before submission
+    if (name.trim() && surname.trim() && number.trim()) {
+      const profileData = { name, surname, number };
+      onSubmit(profileData);
+      setModalProfile(false);
+      // Reset form
+      setName('');
+      setSurname('');
+      setNumber('');
+    }
   };
 
   return (
-    <View style={styles.container}>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalProfile}
-        onRequestClose={() => setModalProfile(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Enter Details</Text>
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={modalProfile}
+      onRequestClose={() => setModalProfile(false)}
+    >
+      <View style={styles.modalOverlay}>
+        <View style={styles.modalContainer}>
+          <TouchableOpacity 
+            style={styles.closeIcon} 
+            onPress={() => setModalProfile(false)}
+          >
+            <Ionicons name="close-circle" size={30} color="#888" />
+          </TouchableOpacity>
 
+          <Text style={styles.modalTitle}>Create Profile</Text>
+          <Text style={styles.modalSubtitle}>Enter your personal details</Text>
+
+          <View style={styles.inputContainer}>
+            <Ionicons name="person-outline" size={20} color="#666" style={styles.inputIcon} />
             <TextInput
               style={styles.input}
-              placeholder="Name"
+              placeholder="First Name"
               value={name}
               onChangeText={setName}
               autoCapitalize="words"
+              placeholderTextColor="#999"
             />
+          </View>
 
+          <View style={styles.inputContainer}>
+            <Ionicons name="person-outline" size={20} color="#666" style={styles.inputIcon} />
             <TextInput
               style={styles.input}
-              placeholder="Surname"
+              placeholder="Last Name"
               value={surname}
               onChangeText={setSurname}
               autoCapitalize="words"
+              placeholderTextColor="#999"
             />
+          </View>
 
+          <View style={styles.inputContainer}>
+            <Ionicons name="call-outline" size={20} color="#666" style={styles.inputIcon} />
             <TextInput
               style={styles.input}
               placeholder="Phone Number"
               value={number}
               onChangeText={setNumber}
               keyboardType="phone-pad"
+              placeholderTextColor="#999"
             />
-
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity
-                style={[styles.button, styles.closeButton]}
-                onPress={() => setModalProfile(false)}
-              >
-                <Text style={styles.buttonText}>Save</Text>
-              </TouchableOpacity>
-            </View>
           </View>
+
+          <TouchableOpacity 
+            style={styles.submitButton} 
+            onPress={handleSubmit}
+          >
+            <Text style={styles.submitButtonText}>Save Profile</Text>
+            <Ionicons name="checkmark-circle" size={24} color="white" />
+          </TouchableOpacity>
         </View>
-      </Modal>
-    </View>
+      </View>
+    </Modal>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f7f7f7',
-  },
-  openButton: {
-    padding: 10,
-    backgroundColor: '#007BFF',
-    borderRadius: 5,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-  },
   modalOverlay: {
     flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContainer: {
-    backgroundColor: '#fff',
-    width: '80%',
-    padding: 20,
-    borderRadius: 10,
-    elevation: 5, // For Android shadow effect
-    shadowColor: '#000', // For iOS shadow effect
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
+    width: '85%',
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 25,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 8,
+  },
+  closeIcon: {
+    position: 'absolute',
+    top: 15,
+    right: 15,
   },
   modalTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 20,
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#333',
     textAlign: 'center',
+    marginBottom: 10,
+  },
+  modalSubtitle: {
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+    borderRadius: 12,
+    marginBottom: 15,
+    paddingHorizontal: 15,
+  },
+  inputIcon: {
+    marginRight: 10,
   },
   input: {
-    height: 50,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 8,
-    marginBottom: 15,
-    paddingLeft: 10,
-    fontSize: 16,
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  button: {
     flex: 1,
-    padding: 10,
-    borderRadius: 5,
-    margin: 5,
+    height: 50,
+    fontSize: 16,
+    color: '#333',
   },
   submitButton: {
-    backgroundColor: '#28a745',
+    backgroundColor: '#4A90E2',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 15,
+    borderRadius: 12,
+    marginTop: 10,
   },
-  closeButton: {
-    backgroundColor: '#dc3545',
+  submitButtonText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: '600',
+    marginRight: 10,
   },
 });
 

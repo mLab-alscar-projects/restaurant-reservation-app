@@ -19,6 +19,7 @@ import { useRouter } from "expo-router";
 import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import GoogleMap from "./mapPage";
 
 const HomePage = () => {
   // States
@@ -26,11 +27,48 @@ const HomePage = () => {
   const [RestaurantsData, setRestaurantsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [coordinates, setCoordinates] = useState('');
+  const [likedRestaurants, setLikedRestaurants] = useState([]);
   
   // Hooks
   const router = useRouter();
 
  
+  // Functions
+
+  const toggleLike = (restaurantId) => {
+    setLikedRestaurants(prevLiked => 
+      prevLiked.includes(restaurantId)
+        ? prevLiked.filter(id => id !== restaurantId)
+        : [...prevLiked, restaurantId]
+    );
+  };
+
+  const handleShare = (restaurant) => {
+    console.log(`Sharing ${restaurant.name}`);
+  };
+
+  
+    const renderStarRating = (rating) => {
+      return (
+        <View style={styles.starContainer}>
+          {[1, 2, 3, 4, 5].map((star) => (
+            <MaterialCommunityIcons
+              key={star}
+              name={star <= rating ? 'star' : 'star-outline'}
+              size={16}
+              color={star <= rating ? '#FFD700' : '#CCCCCC'}
+            />
+          ))}
+        </View>
+      );
+    };
+
+  // Search function
+  const handleSearch = (query) => {
+    setSearchQuery(query)
+  };
+  
 
   const fetchRestaurants = async () => {
     try {
@@ -51,6 +89,14 @@ const HomePage = () => {
       );
 
       setRestaurantsData(response.data.restaurants || []);
+   
+      //  filtered Coordinates
+      const filteredCordinates = response.data.restaurants.map(
+        (restaurant) => restaurant.coordinates
+      );
+
+      setCoordinates(filteredCordinates);
+
       setError(null);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -69,8 +115,14 @@ const HomePage = () => {
     fetchRestaurants();
   }, []);
 
-  console.log(RestaurantsData)
+  // logs for debugging
 
+  // filtering data restaurants based on the name of the restaurant
+  const filteredRestaurants = RestaurantsData.filter((restaurant)=>
+  restaurant.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+  
+  
   // Render loading state
   if (isLoading) {
     return (
@@ -125,84 +177,117 @@ const HomePage = () => {
             style={styles.searchInput}
             placeholder="Find your perfect dining spot"
             value={searchQuery}
-            onChangeText={setSearchQuery}
+            onChangeText={handleSearch}
             placeholderTextColor="#888"
           />
           <TouchableOpacity
             style={styles.mapButton}
-            onPress={() => router.push("/mapPage")}
+            onPress={() =>
+              router.push({
+                pathname: "/mapPage",
+                params:{
+                  data: JSON.stringify(RestaurantsData,null,2)
+                }
+              })
+            }
           >
             <Ionicons name="map-outline" size={24} color="#333" />
           </TouchableOpacity>
         </View>
       </View>
 
-      {/* Rest of your existing code remains the same */}
 
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollViewContent}
-      >
-        {RestaurantsData.length > 0 ? (
-          RestaurantsData.map((restaurant) => (
-            <TouchableOpacity
-              key={restaurant._id}
-              style={[
-                styles.restaurantCard,
-                { borderLeftColor: restaurant.color },
-              ]}
-              onPress={() =>
-                router.push({
-                  pathname: "/reservationPage",
-                  params: { restaurantId: restaurant._id },
-                })
-              }
-            >
-              <Image
-                  source={restaurant.image}
-                  style={styles.restaurantImage}
-                  placeholder={require('../assets/Munchies.jpg')}
-                  contentFit="cover"
-                />
-              <View style={styles.restaurantDetails}>
-                <View style={styles.restaurantHeader}>
-                  <Text style={styles.restaurantName}>{restaurant.name}</Text>
-                </View>
-
-                <View style={styles.restaurantMetaContainer}>
-                  <View style={styles.metaItem}>
-                    <MaterialCommunityIcons
-                      name="map-marker-distance"
-                      size={16}
-                      color="#666"
+     {/* Restaurents Container */}
+     <ScrollView
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={styles.scrollViewContent}
+    >
+      {filteredRestaurants.length > 0 ? (
+        filteredRestaurants.map((restaurant) => (
+          <TouchableOpacity
+            key={restaurant._id}
+            style={[
+              styles.restaurantCard,
+              { borderLeftColor: restaurant.color },
+            ]}
+            onPress={() =>
+              router.push({
+                pathname: "/reservationPage",
+                params: { restaurantId: restaurant._id },
+              })
+            }
+          >
+            <Image
+              source={restaurant.image}
+              style={styles.restaurantImage}
+              placeholder={require('../assets/Munchies.jpg')}
+              contentFit="cover"
+            />
+            <View style={styles.restaurantDetails}>
+              <View style={styles.restaurantHeader}>
+                <Text style={styles.restaurantName}>{restaurant.name}</Text>
+                <View style={styles.actionButtonsContainer}>
+                  <TouchableOpacity 
+                    style={styles.shareButton}
+                    onPress={() => handleShare(restaurant)}
+                  >
+                    <Ionicons 
+                      name="share-social-outline" 
+                      size={20} 
+                      color="#666" 
                     />
-                    <Text style={styles.metaText}>{restaurant.location}</Text>
-                  </View>
-                  <View style={styles.metaItem}>
-                    <Ionicons name="time-outline" size={16} color="#666" />
-                    <Text style={styles.metaText}>{restaurant.timeslot}</Text>
-                  </View>
-                </View>
-
-                <View style={styles.additionalMetaContainer}>
-                  <Text style={styles.metaText}>
-                    Tables: {restaurant.tables}
-                  </Text>
-                  <Text style={styles.cuisineText}>{restaurant.cuisine}</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity 
+                    style={styles.likeButton}
+                    onPress={() => toggleLike(restaurant._id)}
+                  >
+                    <Ionicons 
+                      name={likedRestaurants.includes(restaurant._id) ? "heart" : "heart-outline"} 
+                      size={20} 
+                      color={likedRestaurants.includes(restaurant._id) ? "red" : "#666"} 
+                    />
+                  </TouchableOpacity>
                 </View>
               </View>
-            </TouchableOpacity>
-          ))
-        ) : (
-          <View style={styles.noRestaurantsContainer}>
-            <Text style={styles.noRestaurantsText}>No restaurants found</Text>
-          </View>
-        )}
-      </ScrollView>
+
+              {renderStarRating(restaurant.rating || 5)}
+
+              <View style={styles.restaurantMetaContainer}>
+                <View style={styles.metaItem}>
+                  <MaterialCommunityIcons
+                    name="map-marker-distance"
+                    size={16}
+                    color="#666"
+                  />
+                  <Text style={styles.metaText}>{restaurant.location}</Text>
+                </View>
+                <View style={styles.metaItem}>
+                  <Ionicons name="time-outline" size={16} color="#666" />
+                  <Text style={styles.metaText}>{restaurant.timeslot}</Text>
+                </View>
+              </View>
+
+              <View style={styles.additionalMetaContainer}>
+                <Text style={styles.metaText}>
+                  Tables: {restaurant.tables}
+                </Text>
+                <Text style={styles.cuisineText}>{restaurant.cuisine}</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+        ))
+      ) : (
+        <View style={styles.noRestaurantsContainer}>
+          <Text style={styles.noRestaurantsText}>No restaurants found</Text>
+        </View>
+      )}
+    </ScrollView>
     </View>
   );
 };
 
+
+// Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -348,6 +433,29 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#666",
   },
+
+  restaurantHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  actionButtonsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  shareButton: {
+    marginRight: 10,
+    padding: 5,
+  },
+  likeButton: {
+    padding: 5,
+  },
+  starContainer: {
+    flexDirection: "row",
+    marginBottom: 10,
+  },
 });
+// End 
 
 export default HomePage;
