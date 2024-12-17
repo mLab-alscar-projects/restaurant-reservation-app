@@ -1,78 +1,130 @@
-import React, { useState } from "react";
-import { View, StyleSheet, Modal, Text, TouchableOpacity } from "react-native";
-import Icon from "react-native-vector-icons/FontAwesome";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import { Picker } from "@react-native-picker/picker";
+import React, { useState } from 'react';
+import { 
+  View, 
+  Text, 
+  StyleSheet, 
+  TouchableOpacity, 
+  Modal, 
+  Pressable 
+} from 'react-native';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import { Ionicons } from '@expo/vector-icons';
 
-// Beginning of Functional component
-const PeopleTimeDate = ({selectedDateTime,handleChange, selectedValue,setSelectedValue}) => {
-  
-  // States
-  const [isModalVisible, setIsModalVisible] = useState(false);
- 
- 
- 
-//  Functions to change states
-  const toggleModal = () => {
-    setIsModalVisible(!isModalVisible);
+const ReservationPicker = ({ 
+  selectedDateTime, 
+  setSelectedDateTime, 
+  selectedPeople, 
+  setSelectedPeople, 
+  accentColor = '#007bff' 
+}) => {
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [isPeopleModalVisible, setPeopleModalVisible] = useState(false);
+
+  // Date Picker Methods
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
   };
 
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirmDate = (date) => {
+    setSelectedDateTime(date);
+    hideDatePicker();
+  };
+
+  // People Selector Methods
+  const increasePeople = () => {
+    setSelectedPeople(Math.min(selectedPeople + 1, 10));
+  };
+
+  const decreasePeople = () => {
+    setSelectedPeople(Math.max(selectedPeople - 1, 1));
+  };
+
+  // Format date and time
+  const formatDate = (date) => {
+    return date.toLocaleDateString('en-US', {
+      weekday: 'short', 
+      month: 'short', 
+      day: 'numeric'
+    });
+  };
+
+  const formatTime = (date) => {
+    return date.toLocaleTimeString('en-US', {
+      hour: '2-digit', 
+      minute: '2-digit'
+    });
+  };
 
   return (
     <View style={styles.container}>
-      {/* Main Content */}
-      <TouchableOpacity onPress={toggleModal} style={styles.row}>
-        <Icon name="users" size={24} color="#4CAF50" style={styles.icon} />
-        <Icon name="clock-o" size={24} color="#2196F3" style={styles.icon} />
-        <Icon name="calendar" size={24} color="#FF5722" style={styles.icon} />
+      {/* Date Picker */}
+      <TouchableOpacity 
+        style={[styles.pickerButton, { borderColor: accentColor }]} 
+        onPress={showDatePicker}
+      >
+        <Ionicons name="calendar" size={24} color={accentColor} />
+        <View style={styles.dateTextContainer}>
+          <Text style={styles.dateText}>{formatDate(selectedDateTime)}</Text>
+          <Text style={styles.timeText}>{formatTime(selectedDateTime)}</Text>
+        </View>
       </TouchableOpacity>
 
-      {/* Modal Popup */}
+      {/* Date Picker Modal */}
+      <DateTimePickerModal
+        isVisible={isDatePickerVisible}
+        mode="datetime"
+        onConfirm={handleConfirmDate}
+        onCancel={hideDatePicker}
+        date={selectedDateTime}
+        minimumDate={new Date()}
+      />
+
+      {/* People Selector */}
+      <TouchableOpacity 
+        style={[styles.pickerButton, { borderColor: accentColor }]} 
+        onPress={() => setPeopleModalVisible(true)}
+      >
+        <Ionicons name="people" size={24} color={accentColor} />
+        <Text style={styles.peopleText}>{selectedPeople} People</Text>
+      </TouchableOpacity>
+
+      {/* People Modal */}
       <Modal
-        visible={isModalVisible}
+        animationType="slide"
         transparent={true}
-        animationType="fade"
-        onRequestClose={toggleModal}
+        visible={isPeopleModalVisible}
+        onRequestClose={() => setPeopleModalVisible(false)}
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            {/* Date and Time Picker */}
-            <Text style={{textAlign:"center", fontSize:20}}>Select Date and Time</Text>
-
-            <View>
-              <DateTimePicker
-                display="spinner"
-                value={selectedDateTime}
-                mode="datetime"
-                onChange={handleChange}
-              />
-              {/* {console.log(selectedDateTime)} */}
-            </View>
-            
-              <Text style={{textAlign:"center", fontSize:20}}>Select Number of People</Text>
-            <View>   
-              <Picker
-                selectedValue={selectedValue}
-                onValueChange={(itemValue) => setSelectedValue(itemValue)}
-                style={{ height: 50, width: 150 }}
+            <Text style={styles.modalTitle}>Number of People</Text>
+            <View style={styles.counterContainer}>
+              <Pressable 
+                style={styles.counterButton} 
+                onPress={decreasePeople}
+                disabled={selectedPeople <= 1}
               >
-                {Array.from({ length: 20 }, (_, index) => index + 1).map(
-                  (number) => (
-                    <Picker.Item
-                      key={number}
-                      label={`${number}`}
-                      value={number}
-                    />
-                  )
-                )}
-                {console.log(selectedValue)}
-              </Picker>
+                <Text style={styles.counterButtonText}>-</Text>
+              </Pressable>
+              <Text style={styles.counterText}>{selectedPeople}</Text>
+              <Pressable 
+                style={styles.counterButton} 
+                onPress={increasePeople}
+                disabled={selectedPeople >= 10}
+              >
+                <Text style={styles.counterButtonText}>+</Text>
+              </Pressable>
             </View>
-
-            {/* Close Popup Model button */}
-            <TouchableOpacity onPress={toggleModal} style={styles.closeButton}>
-              <Text style={styles.closeButtonText}>Confirm</Text>
-            </TouchableOpacity>
+            <Pressable 
+              style={[styles.modalButton, { backgroundColor: accentColor }]} 
+              onPress={() => setPeopleModalVisible(false)}
+            >
+              <Text style={styles.modalButtonText}>Confirm</Text>
+            </Pressable>
           </View>
         </View>
       </Modal>
@@ -82,68 +134,84 @@ const PeopleTimeDate = ({selectedDateTime,handleChange, selectedValue,setSelecte
 
 const styles = StyleSheet.create({
   container: {
-    borderWidth: 2,
-    borderColor: "#ddd",
-    borderRadius: 8,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     padding: 16,
-    backgroundColor: "#fff",
-    alignSelf: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
   },
-  row: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",
+  pickerButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 12,
+    width: '48%',
   },
-  icon: {
-    marginHorizontal: 8,
+  dateTextContainer: {
+    marginLeft: 12,
+  },
+  dateText: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  timeText: {
+    fontSize: 14,
+    color: 'gray',
+  },
+  peopleText: {
+    marginLeft: 12,
+    fontSize: 16,
+    fontWeight: '600',
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
   },
   modalContent: {
-    width: 400,
-    height: 550,
+    width: '80%',
+    backgroundColor: 'white',
+    borderRadius: 20,
     padding: 20,
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 5,
-    borderWidth: 2,
-    borderColor: "#97CBDC",
-    alignItems: "center",
-    flexDirection: "column",
-    
+    alignItems: 'center',
   },
-  modalText: {
+  modalTitle: {
     fontSize: 18,
+    fontWeight: 'bold',
     marginBottom: 20,
-    textAlign: "center",
   },
-  closeButton: {
-    position: "absolute",
-    backgroundColor: "#FF5722",
-    borderRadius: 8,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    top: 480,
+  counterContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
   },
-  closeButtonText: {
-    color: "#fff",
+  counterButton: {
+    backgroundColor: '#f0f0f0',
+    width: 50,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 25,
+  },
+  counterButtonText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  counterText: {
+    fontSize: 20,
+    marginHorizontal: 20,
+  },
+  modalButton: {
+    width: '100%',
+    padding: 12,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  modalButtonText: {
+    color: 'white',
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
 });
 
-export default PeopleTimeDate;
+export default ReservationPicker;

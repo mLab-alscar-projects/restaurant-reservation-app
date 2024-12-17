@@ -171,6 +171,10 @@ const RegisterPage = () => {
             <Text style={styles.buttonTextregister}>{isLoading ? <ActivityIndicator size={'small'} color={'#333'}/> : "REGISTER"}</Text>
           </Pressable>
         </View>
+
+        <Pressable onPress={() => router.push("./loginPage")}> 
+            <Text style={styles.forgottenPasswordTextlogin}>Already Have an Account? Sign in</Text>
+        </Pressable>
       </View>
       {/* ENDS */}
     </View>

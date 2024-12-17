@@ -44,10 +44,11 @@ const LoginPage = () => {
             );
 
             //  EXTRACT TOKEN
-            const token = response.data.token
+            const { token, email: userEmail } = response.data;
            
             // SAVE TOKEN TO LOCAL STORAGE
             await AsyncStorage.setItem('userToken', token);
+            await AsyncStorage.setItem('userData', userEmail);
 
             Toast.show({
                 type: 'success', 

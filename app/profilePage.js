@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,16 +7,17 @@ import {
   ScrollView,
   Pressable,
 } from 'react-native';
+
 import { LinearGradient } from 'expo-linear-gradient';
+
 import {
   User,
-  Settings,
   LogOut,
   Edit2,
-  CreditCard,
   HelpCircle,
   Shield
 } from 'lucide-react-native';
+
 import { useRouter } from 'expo-router';
 import ProfileModal from '../Components/profilemodal';
 import FeedbackForm from '../Components/formmodal';
@@ -35,15 +36,24 @@ const ProfileScreen = () => {
   const [name, setName] = useState('');
   const [phoneNumber, setphoneNumber] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-  const [user] = useState({
-    name: "Alson",
-    email: "oscar@gmail.com",
-    phoneNumber: '09283891393',
-    profileImage: require('../assets/Burger.jpg'),
-    memberSince: "23 December 2024",
-    totalReservations: 1,
-    loyaltyPoints: 560
-  });
+  const [user, setUser] = useState('');
+
+  useEffect(() => {
+    const fetchUserDeails = async()=>
+      {
+        const user = await AsyncStorage.getItem('userData');
+        if (user) 
+          {
+            setUser(user);
+          }
+      }
+
+    fetchUserDeails();
+  }, []);
+
+  console.log('user : ', user);
+
+
 
 
   // Functions
@@ -146,22 +156,22 @@ const ProfileScreen = () => {
               </Pressable>
             </View>
             
-            <Text style={styles.profileName}>{user.name}</Text>
-            <Text style={styles.profileEmail}>{user.email}</Text>
-            <Text style={styles. profileNumber}>{user.phoneNumber}</Text>
+            <Text style={styles.profileName}>{user.name || 'guest'}</Text>
+            <Text style={styles.profileEmail}>{user}</Text>
+            <Text style={styles. profileNumber}>{user.phoneNumber || ''}</Text>
           </View>
 
           <View style={styles.statsContainer}>
             <View style={styles.statItem}>
-              <Text style={styles.statValue}>{user.totalReservations}</Text>
-              <Text style={styles.statLabel}>Liked</Text>
+              <Text style={styles.statValue}>{user.totalReservations || 0}</Text>
+              <Text style={styles.statLabel}>Reservations</Text>
             </View>
             <View style={styles.statItem}>
-              <Text style={styles.statValue}>{user.loyaltyPoints}</Text>
+              <Text style={styles.statValue}>{user.loyaltyPoints || 0}</Text>
               <Text style={styles.statLabel}>Shared</Text>
             </View>
             <View style={styles.statItem}>
-              <Text style={styles.statValue}>{user.memberSince}</Text>
+              <Text style={styles.statValue}>{user.memberSince || 'Null'}</Text>
               <Text style={styles.statLabel}>Date</Text>
             </View>
           </View>
@@ -253,10 +263,10 @@ const styles = StyleSheet.create({
   headerBackground: {
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
-    paddingBottom: 20,
+    paddingBottom: 10,
   },
   headerContent: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
     paddingTop: 50,
   },
   settingsButton: {
@@ -313,6 +323,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingVertical: 15,
     marginTop: 20,
+    width: '100%'
   },
   statItem: {
     alignItems: 'center',
