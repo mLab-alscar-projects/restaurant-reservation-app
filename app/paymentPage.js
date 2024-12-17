@@ -1,39 +1,42 @@
-import React, { useState } from 'react';
-import { View, Button, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Alert } from 'react-native';
 import { Paystack } from 'react-native-paystack-webview';
-import { useNavigation } from '@react-navigation/native'; // Import useNavigation
+import { useNavigation } from '@react-navigation/native'; 
+import { useLocalSearchParams } from 'expo-router';
+
 
 function Payment() {
-  const [showPaystack, setShowPaystack] = useState(false); // State to control Paystack visibility
-  const navigation = useNavigation(); // Get navigation object
+  const {setShowPaystack, showPaystack, amount, email} = useLocalSearchParams ();
+  const [isPaystackVisible, setIsPaystackVisible] = useState(showPaystack || false);
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    setIsPaystackVisible(showPaystack || false);
+  }, [showPaystack]);
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      {/* Button to show the Paystack WebView */}
-      <Button
-        title="Pay with Paystack"
-        onPress={() => setShowPaystack(true)} // Show Paystack WebView when clicked
-      />
 
-      {showPaystack && (
+      {isPaystackVisible  && (
         <Paystack
           paystackKey="pk_test_f73c293f14c859435bc6fe2aa081938ac5326239"
-          amount={'5000.00'}
-          billingEmail="paystackwebview@something.com"
+          amount={amount}
+          billingEmail= {email}
           currency="ZAR"
           activityIndicatorColor="green"
           onCancel={() => {
             Alert.alert('Payment Canceled', 'You have canceled the payment process.');
-            setShowPaystack(false); // Hide Paystack WebView on cancel
+            setIsPaystackVisible(false); 
+            
+            navigation.navigate('homePage'); 
           }}
           onSuccess={(res) => {
             Alert.alert('Payment Successful', `Transaction ID: ${res.transactionRef.reference}`);
-            setShowPaystack(false); // Hide Paystack WebView on success
+            setIsPaystackVisible(false); 
 
-            // Navigate back to the homepage
-            navigation.navigate('homePage'); // Replace 'HomePage' with your home route name
+            navigation.navigate('homePage'); 
           }}
-          autoStart={true} // Automatically start the payment process
+          autoStart={true}
         />
       )}
     </View>

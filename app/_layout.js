@@ -34,8 +34,26 @@ export default function RootLayout(){
         }}
       />
 
+      <Stack.Screen
+        name="checkoutPage"
+        options={{
+          headerShown: true,
+          headerTitle: 'Payment', 
+          headerStyle: {
+            backgroundColor: '#3498db', 
+          },
+          headerTitleStyle: {
+            color: '#fff', 
+            fontSize: 18,
+            fontWeight: 'bold',
+            letterSpacing: 1
+          },
+          headerTintColor: '#000', 
+        }}
+      />
+
       {/* <Stack.Screen
-        name="splashScreen"
+        name="checkoutPage"
         options={{
           headerShown: false, 
         }}

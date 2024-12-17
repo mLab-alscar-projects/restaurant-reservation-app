@@ -7,6 +7,7 @@ import {
   Pressable, 
   Image, 
   Dimensions, 
+  ActivityIndicator
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useLocalSearchParams  } from 'expo-router';
@@ -14,7 +15,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 // ICONS
-import PeopleTimeDate from '../Components/toggles';
+import ReservationPicker from '../Components/toggles.js';
 
 
 // SCREEN DIMENSIONS
@@ -23,8 +24,8 @@ const { width } = Dimensions.get('window');
 const ReservationPage = () => {
 
 // States
-  const [selectedDateTime, setselectedDateTime] = useState(new Date());
-  const [selectedValue, setSelectedValue] = useState(1);
+  const [selectedDateTime, setSelectedDateTime] = useState(new Date());
+  const [selectedPeople, setSelectedPeople] = useState(2);
   const [menuData, setMenuData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -32,18 +33,14 @@ const ReservationPage = () => {
   const restaurantData = restaurant ? JSON.parse(restaurant) : null;
 
   // FETCH MENU
-  // FETCH MENU DATA ON COMPONENT MOUNT
   useEffect(() => {
     const fetchMenu = async () => {
-      // RESET LOADING AND ERROR STATES
       setIsLoading(true);
-
+  
       try {
-        // RETRIEVE AUTH TOKEN
         const token = await AsyncStorage.getItem('userToken');
-        console.log("token", token)
-        
-        // FETCH MENU ITEMS
+        console.log("Token:", token);
+  
         const response = await axios.get(
           `https://acrid-street-production.up.railway.app/api/v2/restaurants/${restaurantData._id}/menu`,
           {
@@ -52,53 +49,41 @@ const ReservationPage = () => {
             },
           }
         );
-        
-        // UPDATE MENU DATA
+  
         setMenuData(response.data.menuItems);
       } catch (error) {
-        // SET ERROR STATE IF FETCHING FAILS
         console.error("ERROR FETCHING MENU:", error);
       } finally {
-        // STOP LOADING INDICATOR
         setIsLoading(false);
       }
     };
-
-    fetchMenu();
-  }, [restaurantData]);
-
-  console.log('My data' , menuData);
-
-
-  // functions to update state
-  const handleChange = (event, date) => {
-    if (date) {
-      const selectedDate = date.toDateString(); // Extract the date
-      const selectedTime = date.toTimeString(); // Extract the time (HH:MM:SS)
-      console.log('Date:', selectedDate);
-      console.log('Time:', selectedTime);
-      setselectedDateTime(date);
-      
+  
+    if (restaurantData) {
+      fetchMenu();
     }
-  };
+  }, []);
+  
 
   // Function to navigate
   const handleCheckout= ()=>{
       router.push({
         pathname: "./checkoutPage",
-        params:{selectedValue,selectedDateTime}
+        params:{selectedPeople,selectedDateTime, name: restaurantData.name, location: restaurantData.location, timeslot: restaurantData.timeslot}
       })
-      console.log("number",selectedValue);
-      console.log("date", selectedDateTime)
   }
   
  
- 
-
-
-
-
-
+  // RENDER LOADING INDICATOR
+  if (isLoading) {
+    return (
+      <View style={[styles.loadingContainer, { backgroundColor: '#f4f7fa' }]}>
+        <ActivityIndicator 
+          size="large" 
+          color={restaurantData.color || '#000'}
+        />
+      </View>
+    );
+  }
   
 // Beginning of rendered Components
   return (  
@@ -112,12 +97,12 @@ const ReservationPage = () => {
 
       {/* DATE TIME PEOPLE COMPONENT FROM UTILS WITH PROPS PASSED*/}
       <View style={styles.dateTimeContainer}>
-      <PeopleTimeDate
-      selectedDateTime={selectedDateTime}
-      setselectedDateTime={setselectedDateTime}
-      selectedValue={selectedValue}
-      setSelectedValue={setSelectedValue}
-      handleChange ={handleChange}
+      <ReservationPicker
+        selectedDateTime={selectedDateTime}
+        setSelectedDateTime={setSelectedDateTime}
+        selectedPeople={selectedPeople}
+        setSelectedPeople={setSelectedPeople}
+        accentColor={restaurantData.color} 
       />
       </View>
 
@@ -130,7 +115,9 @@ const ReservationPage = () => {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={styles.menuCard}>
-            <Image source={{uri: item.image}} style={styles.menuImage} />
+            <View style={styles.imageCover}>
+              <Image source={{uri: item.image}} style={styles.menuImage} />
+            </View>
             <View style={styles.menuDetails}>
               <Text style={styles.menuName}>{item.name}</Text>
               <Text style={styles.menuPrice}>{item.price}</Text>
@@ -160,6 +147,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f4f7fa',
+  },
+
+  loadingContainer: 
+  {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   // HEADER STYLES
@@ -196,8 +190,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
-  menuImage: {
+  imageCover: {
     width: 150,
+    height: 100,
+  },
+  
+  menuImage: {
+    width: '100%',
     height: '100%',
   },
 

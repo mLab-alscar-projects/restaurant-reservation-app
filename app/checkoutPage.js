@@ -1,26 +1,29 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, Dimensions,Pressable} from 'react-native';
-import { useRouter } from 'expo-router';
+import React, {useState} from 'react';
+import { View, Text, StyleSheet, Image, ScrollView,Pressable} from 'react-native';
+import {  useRouter } from 'expo-router';
 import { useLocalSearchParams } from 'expo-router';
 
 
 
 const PaymentSummaryPage = () => {
-  // Hooks
+ 
   const router = useRouter();
-  const {selectedValue,selectedDateTime} = useLocalSearchParams ();
-  {console.log("value",selectedValue)}
+  const {selectedPeople,selectedDateTime, name, location, timeslot} = useLocalSearchParams ();
+   const [showPaystack, setShowPaystack] = useState(false);
 
-  // Sample data - in a real app, this would come from props or state
+  // PAYMENT DATA
   const paymentDetails = {
     name: "John Doe",
     email: "johndoe@example.com",
     dateOfPayment: selectedDateTime,
-    numberOfTables: selectedValue,
-    restaurantName: "Sunset Bistro",
-    amount:selectedValue * 200
+    numberOfTables: selectedPeople,
+    restaurantName: name,
+    location: location,
+    timeslot: timeslot,
+    amount: selectedPeople * 100
   };
 
+  // DETAILS ROW
   const DetailRow = ({ label, value }) => (
     <View style={styles.detailRow}>
       <Text style={styles.labelLeft}>{label}:</Text>
@@ -29,7 +32,7 @@ const PaymentSummaryPage = () => {
   );
 
 
-  // Beginning of rendered Components
+
   return (
     <ScrollView style={styles.container}>
       {/* Flower decorations */}
@@ -51,12 +54,22 @@ const PaymentSummaryPage = () => {
         <DetailRow label="Date and Time of Payment" value={paymentDetails.dateOfPayment} />
         <DetailRow label="Number of Tables" value={paymentDetails.numberOfTables} />
         <DetailRow label="Restaurant Name" value={paymentDetails.restaurantName} />
+        <DetailRow label="Working Hours" value={paymentDetails.timeslot} />
+        <DetailRow label="Location" value={paymentDetails.location} />
         <DetailRow label="Total Amount" value={paymentDetails.amount} />
       </View>
       
       {/* Checkout button */}
       <View style={styles.addButtonWrapper}>
-        <Pressable style={styles.addButton} onPress={()=>  router.push("/paymentPage")}>
+        <Pressable style={styles.addButton} onPress={()=>  
+          {
+            router.push({
+              pathname: "./paymentPage",
+              params:{setShowPaystack: setShowPaystack, showPaystack: showPaystack, amount : paymentDetails.amount, email : paymentDetails.email  }
+            });
+            setShowPaystack(true);
+          }
+          }>
           <Text style={styles.addButtonText}>Pay</Text>
         </Pressable>
       </View>
@@ -64,8 +77,6 @@ const PaymentSummaryPage = () => {
        
   );
 };
-// End of Rendered Components
-
 
 
 // Styles
