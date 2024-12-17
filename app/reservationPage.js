@@ -11,6 +11,7 @@ import {
 import { useRouter } from 'expo-router';
 import { useLocalSearchParams  } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 // ICONS
 import PeopleTimeDate from '../Components/toggles';
@@ -36,11 +37,11 @@ const ReservationPage = () => {
     const fetchMenu = async () => {
       // RESET LOADING AND ERROR STATES
       setIsLoading(true);
-      setError(null);
 
       try {
         // RETRIEVE AUTH TOKEN
-        const token = await AsyncStorage.getItem('token');
+        const token = await AsyncStorage.getItem('userToken');
+        console.log("token", token)
         
         // FETCH MENU ITEMS
         const response = await axios.get(
@@ -57,7 +58,6 @@ const ReservationPage = () => {
       } catch (error) {
         // SET ERROR STATE IF FETCHING FAILS
         console.error("ERROR FETCHING MENU:", error);
-        setError('Failed to load menu items');
       } finally {
         // STOP LOADING INDICATOR
         setIsLoading(false);
@@ -65,9 +65,9 @@ const ReservationPage = () => {
     };
 
     fetchMenu();
-  }, [restaurantData._id]);
+  }, [restaurantData]);
 
-  console.log('My data' , restaurant);
+  console.log('My data' , menuData);
 
 
   // functions to update state
@@ -111,6 +111,7 @@ const ReservationPage = () => {
 
 
       {/* DATE TIME PEOPLE COMPONENT FROM UTILS WITH PROPS PASSED*/}
+      <View style={styles.dateTimeContainer}>
       <PeopleTimeDate
       selectedDateTime={selectedDateTime}
       setselectedDateTime={setselectedDateTime}
@@ -118,6 +119,7 @@ const ReservationPage = () => {
       setSelectedValue={setSelectedValue}
       handleChange ={handleChange}
       />
+      </View>
 
 
 
@@ -128,11 +130,11 @@ const ReservationPage = () => {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={styles.menuCard}>
-            <Image source={item.image} style={styles.menuImage} />
+            <Image source={{uri: item.image}} style={styles.menuImage} />
             <View style={styles.menuDetails}>
               <Text style={styles.menuName}>{item.name}</Text>
               <Text style={styles.menuPrice}>{item.price}</Text>
-              <Text style={styles.menuPrice}>{item.price}</Text>
+              <Text style={[styles.menuPrice, {color: item.isActive ? '#2ecc71' : '#e74b4b'}]}>{item.isActive ? 'Avilable' : 'Out of stock'}</Text>
             </View>
           </View>
         )}
@@ -183,7 +185,7 @@ const styles = StyleSheet.create({
   menuCard: {
     flexDirection: 'row',
     backgroundColor: '#ffffff',
-    borderRadius: 10,
+    borderRadius: 5,
     overflow: 'hidden',
     marginBottom: 10,
     shadowColor: '#000',
@@ -195,7 +197,7 @@ const styles = StyleSheet.create({
   },
 
   menuImage: {
-    width: 80,
+    width: 150,
     height: '100%',
   },
 
@@ -271,6 +273,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textTransform: 'uppercase',
   },
+
+  dateTimeContainer:
+  {
+    paddingBottom: 10
+  }
 });
 
 export default ReservationPage;
