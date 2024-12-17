@@ -18,16 +18,25 @@ import {
   Shield
 } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
+import ProfileModal from '../Components/profilemodal';
+import FeedbackForm from '../Components/formmodal';
+import TermsAndConditions from '../Components/policiesmodal';
 
 const ProfileScreen = () => {
   // Hooks
   const router = useRouter();
 
+  // STATES
+  const [modalProfile, setModalProfile] = useState(false);
+  const [modalform, setModalform] = useState(false);
+  const [modalpolicies, setModalpolicies] = useState(false);
+
   const [user] = useState({
     name: "Alson",
     email: "oscar@gmail.com",
+    phoneNumber: '09283891393',
     profileImage: require('../assets/Burger.jpg'),
-    memberSince: "December 2024",
+    memberSince: "23 December 2024",
     totalReservations: 1,
     loyaltyPoints: 560
   });
@@ -37,11 +46,6 @@ const ProfileScreen = () => {
       title: "Edit Profile",
       subtitle: "Update your personal information",
       icon: <Edit2 color="#2c3e50" size={24} />
-    },
-    {
-      title: "Payment Methods",
-      subtitle: "Manage your payment options",
-      icon: <CreditCard color="#2c3e50" size={24} />
     },
     {
       title: "Privacy & Security",
@@ -64,6 +68,18 @@ const ProfileScreen = () => {
 
   const handleLogout= ()=>{
     router.push("/loginPage")
+  }
+
+  const handleProfile = ()=>{
+    setModalProfile(true)
+  }
+
+  const handleForm =()=>{
+    setModalform(true)
+  }
+
+  const handlePolicies = ()=>{
+    setModalpolicies(true)
   }
 
 
@@ -89,20 +105,21 @@ const ProfileScreen = () => {
             
             <Text style={styles.profileName}>{user.name}</Text>
             <Text style={styles.profileEmail}>{user.email}</Text>
+            <Text style={styles. profileNumber}>{user.phoneNumber}</Text>
           </View>
 
           <View style={styles.statsContainer}>
             <View style={styles.statItem}>
               <Text style={styles.statValue}>{user.totalReservations}</Text>
-              <Text style={styles.statLabel}>Years worked</Text>
+              <Text style={styles.statLabel}>Liked</Text>
             </View>
             <View style={styles.statItem}>
               <Text style={styles.statValue}>{user.loyaltyPoints}</Text>
-              <Text style={styles.statLabel}>Loyalty Points</Text>
+              <Text style={styles.statLabel}>Shared</Text>
             </View>
             <View style={styles.statItem}>
               <Text style={styles.statValue}>{user.memberSince}</Text>
-              <Text style={styles.statLabel}>Admin Since</Text>
+              <Text style={styles.statLabel}>Date</Text>
             </View>
           </View>
         </View>
@@ -119,11 +136,22 @@ const ProfileScreen = () => {
               styles.menuItem, 
               item.destructive && styles.destructiveMenuItem
             ]}
-            onPress={handleLogout}
+            onPress={()=>{
+              if (item.title === "Logout"){
+                handleLogout()
+              }
+              if (item.title === "Edit Profile"){
+                 handleProfile()
+              } if (item.title === "Help & Support"){
+                handleForm()
+              } if (item.title === "Privacy & Security")
+                handlePolicies()
+            }}
           >
             <View style={styles.menuItemIcon}>
               {item.icon}
             </View>
+
             <View style={styles.menuItemText}>
               <Text style={[
                 styles.menuItemTitle, 
@@ -134,10 +162,33 @@ const ProfileScreen = () => {
               <Text style={styles.menuItemSubtitle}>
                 {item.subtitle}
               </Text>
+            
             </View>
           </Pressable>
         ))}
       </ScrollView>
+
+      {/* Profile Modal Pop up */}
+      {modalProfile && 
+      <ProfileModal 
+      modalProfile={modalProfile}
+      setModalProfile={setModalProfile}/>}
+
+      {
+        modalform && 
+        <FeedbackForm
+        modalform={modalform}
+        setModalform={setModalform}
+        />
+      }
+
+      {
+        modalpolicies && 
+        <TermsAndConditions
+        setModalpolicies={setModalpolicies} 
+        modalpolicies={modalpolicies}
+        />
+      }
     </View>
   );
 };
@@ -201,6 +252,11 @@ const styles = StyleSheet.create({
   profileEmail: {
     fontSize: 16,
     color: 'rgba(255,255,255,0.7)',
+  },
+  profileNumber:{
+    fontSize: 16,
+    color: 'rgba(255,255,255,0.7)',
+    marginTop:10
   },
   statsContainer: {
     flexDirection: 'row',

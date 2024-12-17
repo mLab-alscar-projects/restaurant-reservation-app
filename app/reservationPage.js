@@ -112,12 +112,6 @@ const ReservationPage = () => {
               <Text style={styles.menuPrice}>{item.price}</Text>
             </View>
             <View style={styles.actionButtons}>
-              <Pressable onPress={() => handleEdit(item)} style={styles.editButton}>
-                <MaterialIcons name="edit" size={20} color="#fff" />
-              </Pressable>
-              <Pressable onPress={() => handleDelete(item)} style={styles.deleteButton}>
-                <MaterialIcons name="delete" size={20} color="#fff" />
-              </Pressable>
             </View>
           </View>
         )}

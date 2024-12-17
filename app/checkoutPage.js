@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, Dimensions,Pressable} from 'react-native';
 import { useRouter } from 'expo-router';
-import { useSearchParams } from 'expo-router';
 import { useLocalSearchParams } from 'expo-router';
 
 
