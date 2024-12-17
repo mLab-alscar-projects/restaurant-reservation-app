@@ -43,15 +43,12 @@ const LoginPage = () => {
                 { headers: { 'Content-Type': 'application/json' } }
             );
 
-            // show the user token
-            console.log(response.data);
-             
-            // Extract the token and store it in the local storage
+            //  EXTRACT TOKEN
             const token = response.data.token
            
+            // SAVE TOKEN TO LOCAL STORAGE
             await AsyncStorage.setItem('userToken', token);
 
-            // Welcome message
             Toast.show({
                 type: 'success', 
                 text1: `Welcome back, ${email}!`,
@@ -60,7 +57,10 @@ const LoginPage = () => {
               });
             setPassword('');
             setEmail('');
-            router.push("/homePage")
+
+            // NAVIGATE
+            router.push("/homePage");
+
         } catch (error) {
             console.error(error);
             Toast.show({
