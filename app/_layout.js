@@ -5,7 +5,7 @@ export default function RootLayout(){
     return (
     <Stack
     screenOptions={{
-      headerShown: true,
+      headerShown: false,
     }}>
       <Stack.Screen
         name="loginPage"
@@ -39,6 +39,31 @@ export default function RootLayout(){
         options={{
           headerShown: true,
           headerTitle: 'Payment', 
+          headerStyle: {
+            backgroundColor: '#3498db', 
+          },
+          headerTitleStyle: {
+            color: '#fff', 
+            fontSize: 18,
+            fontWeight: 'bold',
+            letterSpacing: 1
+          },
+          headerTintColor: '#000', 
+        }}
+      />
+
+      <Stack.Screen
+        name="paymentPage"
+        options={{
+          headerShown: false, 
+        }}
+      />
+
+      <Stack.Screen
+        name="mapPage"
+        options={{
+          headerShown: true,
+          headerTitle: 'Maps', 
           headerStyle: {
             backgroundColor: '#3498db', 
           },
