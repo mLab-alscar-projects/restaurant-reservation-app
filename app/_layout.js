@@ -34,12 +34,12 @@ export default function RootLayout(){
         }}
       />
 
-      <Stack.Screen
+      {/* <Stack.Screen
         name="splashScreen"
         options={{
           headerShown: false, 
         }}
-      />
+      /> */}
       <Stack.Screen
         name="profilePage"
         options={{
@@ -63,10 +63,10 @@ export default function RootLayout(){
           headerShown: true,
           headerTitle: 'Reservations', 
           headerStyle: {
-            backgroundColor: '#3498db', 
+            backgroundColor: '#d3ddda', 
           },
           headerTitleStyle: {
-            color: '#fff', 
+            color: '#333', 
             fontSize: 18,
             fontWeight: 'bold',
             letterSpacing: 1

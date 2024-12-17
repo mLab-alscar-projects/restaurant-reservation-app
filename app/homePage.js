@@ -203,9 +203,9 @@ const HomePage = () => {
       contentContainerStyle={styles.scrollViewContent}
     >
       {filteredRestaurants.length > 0 ? (
-        filteredRestaurants.map((restaurant) => (
+        filteredRestaurants.map((restaurant, index) => (
           <TouchableOpacity
-            key={restaurant._id}
+            key={index}
             style={[
               styles.restaurantCard,
               { borderLeftColor: restaurant.color },
@@ -213,7 +213,7 @@ const HomePage = () => {
             onPress={() =>
               router.push({
                 pathname: "/reservationPage",
-                params: { restaurantId: restaurant._id },
+                params: { restaurant: JSON.stringify(restaurant) },
               })
             }
           >
