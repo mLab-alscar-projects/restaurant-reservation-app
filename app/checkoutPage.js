@@ -1,20 +1,39 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import { View, Text, StyleSheet, Image, ScrollView,Pressable} from 'react-native';
 import {  useRouter } from 'expo-router';
 import { useLocalSearchParams } from 'expo-router';
-
+import { useContext } from 'react';
+import { UserContext } from '../AppContext';
 
 
 const PaymentSummaryPage = () => {
- 
+  const { userDetails } = useContext(UserContext);
   const router = useRouter();
   const {selectedPeople,selectedDateTime, name, location, timeslot} = useLocalSearchParams ();
    const [showPaystack, setShowPaystack] = useState(false);
+   const [user, setUser] = useState('');
 
+
+   useEffect(() => {
+    const fetchUserDeails = async()=>
+      {
+        const user = await AsyncStorage.getItem('userData');
+        if (user) 
+          {
+            setUser(user);
+          }
+      }
+
+    fetchUserDeails();
+  }, []);
+
+  console.log('user : ', user);
+
+ 
   // PAYMENT DATA
   const paymentDetails = {
-    name: "John Doe", // I WILL LEAVE THIS TO YOU TO WORK ON IT
-    email: "johndoe@example.com", // I WILL LEAVE THIS TO YOU TO WORK ON IT
+    name: userDetails.name, 
+    email: user,
     dateOfPayment: selectedDateTime,
     numberOfTables: selectedPeople,
     restaurantName: name,
@@ -50,7 +69,7 @@ const PaymentSummaryPage = () => {
         <Text style={styles.title}>Payment Summary</Text>
 
         <DetailRow label="Name" value={paymentDetails.name} />
-        <DetailRow label="Email" value={paymentDetails.email} />
+        <DetailRow label="Contact Info" value={paymentDetails.email || userDetails.phoneNumber} />
         <DetailRow label="Date and Time" value={paymentDetails.dateOfPayment} />
         <DetailRow label="Number of People" value={paymentDetails.numberOfTables} />
         <DetailRow label="Restaurant Name" value={paymentDetails.restaurantName} />

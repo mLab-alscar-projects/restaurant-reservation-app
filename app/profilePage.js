@@ -296,6 +296,7 @@ useEffect(() => {
         modalpolicies={modalpolicies}
         />
       }
+      
     </View>
   );
 };
