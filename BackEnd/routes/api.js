@@ -4,6 +4,7 @@ import protect from "../Middleware/protect.js";
 import getUsers from "../controllers.js/getUsers.js";
 import createReservation from "../controllers.js/reservations.js";
 import getAllReservations from "../controllers.js/getAllReservations.js";
+import getReservationById from "../controllers.js/getReservationsbyID.js";
 
 const router = express.Router()
 
@@ -21,6 +22,8 @@ router.get("/users", getUsers)
 router.post("/reservations", protect, createReservation)
 
 router.get("/get-reservations", getAllReservations)
+
+router.get('/get-reservation/:id', getReservationById); // Get reservation by ID
 
 
 
