@@ -3,6 +3,7 @@ import { getProfile, loginUser,registerUser,updateProfile } from "../controllers
 import protect from "../Middleware/protect.js";
 import getUsers from "../controllers.js/getUsers.js";
 import createReservation from "../controllers.js/reservations.js";
+import getAllReservations from "../controllers.js/getAllReservations.js";
 
 const router = express.Router()
 
@@ -18,6 +19,8 @@ router.get("/get-profile", protect, getProfile)
 router.get("/users", getUsers)
 
 router.post("/reservations", protect, createReservation)
+
+router.get("/get-reservations", getAllReservations)
 
 
 
