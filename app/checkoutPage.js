@@ -7,33 +7,17 @@ import { UserContext } from '../AppContext';
 
 
 const PaymentSummaryPage = () => {
-  const { userDetails } = useContext(UserContext);
+  const { userDetails,userData } = useContext(UserContext);
   const router = useRouter();
   const {selectedPeople,selectedDateTime, name, location, timeslot} = useLocalSearchParams ();
-   const [showPaystack, setShowPaystack] = useState(false);
-   const [user, setUser] = useState('');
+  const [showPaystack, setShowPaystack] = useState(false);
 
-
-   useEffect(() => {
-    const fetchUserDeails = async()=>
-      {
-        const user = await AsyncStorage.getItem('userData');
-        if (user) 
-          {
-            setUser(user);
-          }
-      }
-
-    fetchUserDeails();
-  }, []);
-
-  console.log('user : ', user);
 
  
   // PAYMENT DATA
   const paymentDetails = {
     name: userDetails.name, 
-    email: user,
+    email: userData,
     dateOfPayment: selectedDateTime,
     numberOfTables: selectedPeople,
     restaurantName: name,
@@ -69,7 +53,7 @@ const PaymentSummaryPage = () => {
         <Text style={styles.title}>Payment Summary</Text>
 
         <DetailRow label="Name" value={paymentDetails.name} />
-        <DetailRow label="Contact Info" value={paymentDetails.email || userDetails.phoneNumber} />
+        <DetailRow label="Email" value={paymentDetails.email } />
         <DetailRow label="Date and Time" value={paymentDetails.dateOfPayment} />
         <DetailRow label="Number of People" value={paymentDetails.numberOfTables} />
         <DetailRow label="Restaurant Name" value={paymentDetails.restaurantName} />

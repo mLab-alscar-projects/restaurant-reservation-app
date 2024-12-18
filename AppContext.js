@@ -9,7 +9,7 @@ export const UserProvider = ({ children }) => {
   const [userDetails, setUserDetails] = useState({ name: '', phoneNumber: '' });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const [userData, setUserData] = useState(null);
   // Function to fetch user details
   const fetchUserDetails = async () => {
     try {
@@ -52,12 +52,25 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+    // Function to fetch userData from AsyncStorage
+    const fetchUserData = async () => {
+        try {
+          const data = await AsyncStorage.getItem('userData');
+          if (data) {
+            setUserData(data); // Update state with userData
+          }
+        } catch (err) {
+          console.error('Error fetching userData:', err);
+        }
+      };
+
   useEffect(() => {
     fetchUserDetails();
+    fetchUserData();
   }, []);
 
   return (
-    <UserContext.Provider value={{ userDetails, loading, error, fetchUserDetails }}>
+    <UserContext.Provider value={{ userDetails, loading, error, fetchUserDetails,userData }}>
       {children}
     </UserContext.Provider>
   );
