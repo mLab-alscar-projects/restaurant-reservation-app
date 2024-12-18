@@ -21,9 +21,9 @@ router.get("/users", getUsers)
 
 router.post("/reservations", protect, createReservation)
 
-router.get("/get-reservations", getAllReservations)
+router.get("/get-reservations", protect, getAllReservations)
 
-router.get('/get-reservation/:id', getReservationById); // Get reservation by ID
+router.get('/get-reservation/:id', protect, getReservationById);
 
 
 
