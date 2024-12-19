@@ -240,7 +240,10 @@ const HomePage = () => {
                   <TouchableOpacity 
                     style={styles.likeButton}
                     onPress={() => toggleLike(restaurant._id)}
+                    
                   >
+                    {console.log("this is the id",restaurant._id)}
+                   
                     <Ionicons 
                       name={likedRestaurants.includes(restaurant._id) ? "heart" : "heart-outline"} 
                       size={20} 

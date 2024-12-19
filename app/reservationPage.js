@@ -49,7 +49,9 @@ const ReservationPage = () => {
             },
           }
         );
-  
+        console.log("restaurantId",restaurantData._id)
+        await AsyncStorage.setItem('restaurantId', restaurantData._id)
+        
         setMenuData(response.data.menuItems);
       } catch (error) {
         console.error("ERROR FETCHING MENU:", error);
@@ -62,7 +64,7 @@ const ReservationPage = () => {
       fetchMenu();
     }
   }, []);
-  
+
 
   // Function to navigate
   const handleCheckout= ()=>{
