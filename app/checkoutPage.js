@@ -1,20 +1,23 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import { View, Text, StyleSheet, Image, ScrollView,Pressable} from 'react-native';
 import {  useRouter } from 'expo-router';
 import { useLocalSearchParams } from 'expo-router';
-
+import { useContext } from 'react';
+import { UserContext } from '../AppContext';
 
 
 const PaymentSummaryPage = () => {
- 
+  const { userDetails,userData } = useContext(UserContext);
   const router = useRouter();
   const {selectedPeople,selectedDateTime, name, location, timeslot} = useLocalSearchParams ();
-   const [showPaystack, setShowPaystack] = useState(false);
+  const [showPaystack, setShowPaystack] = useState(false);
 
+
+ 
   // PAYMENT DATA
   const paymentDetails = {
-    name: "John Doe", // I WILL LEAVE THIS TO YOU TO WORK ON IT
-    email: "johndoe@example.com", // I WILL LEAVE THIS TO YOU TO WORK ON IT
+    name: userDetails.name, 
+    email: userData,
     dateOfPayment: selectedDateTime,
     numberOfTables: selectedPeople,
     restaurantName: name,
@@ -50,7 +53,7 @@ const PaymentSummaryPage = () => {
         <Text style={styles.title}>Payment Summary</Text>
 
         <DetailRow label="Name" value={paymentDetails.name} />
-        <DetailRow label="Email" value={paymentDetails.email} />
+        <DetailRow label="Email" value={paymentDetails.email } />
         <DetailRow label="Date and Time" value={paymentDetails.dateOfPayment} />
         <DetailRow label="Number of People" value={paymentDetails.numberOfTables} />
         <DetailRow label="Restaurant Name" value={paymentDetails.restaurantName} />

@@ -17,7 +17,6 @@ import {
   HelpCircle,
   Shield
 } from 'lucide-react-native';
-
 import { useRouter } from 'expo-router';
 import ProfileModal from '../Components/profilemodal';
 import FeedbackForm from '../Components/formmodal';
@@ -38,7 +37,11 @@ const ProfileScreen = () => {
   const [phoneNumber, setphoneNumber] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [userDetails, setUserDetails] = useState({ name: '', phoneNumber: '' });
 
+  // Functions
   useEffect(() => {
     const fetchUserDeails = async()=>
       {
@@ -55,9 +58,7 @@ const ProfileScreen = () => {
   console.log('user : ', user);
 
 
-
-
-  // Functions
+  // Edit the user details
   const EditNameandPhone = async () => {
     try {
       setIsLoading(true);
@@ -92,8 +93,54 @@ const ProfileScreen = () => {
       setIsLoading(false);
     }
   };
-  
+
+  // Gets the user details
+  const fetchUserDetails = async () => {
+    try {
+        // Retrieve token from AsyncStorage
+        const token = await AsyncStorage.getItem('userToken');
+
+        if (!token) {
+            setError('Token not found. Please log in.');
+            setLoading(false);
+            return;
+        }
+
+        // Send GET request to fetch user details
+        const response = await fetch('https://lumpy-clover-production.up.railway.app/api/get-profile', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` 
+            }
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            setError(data.error || 'Failed to fetch user details');
+            setLoading(false);
+            return;
+        }
+
+        // Set user details in state
+        setUserDetails({
+            name: data.user.name,
+            phoneNumber: data.user.phoneNumber
+        });
+        setLoading(false);
+    } catch (err) {
+        console.error(err);
+        setError('An error occurred while fetching data');
+        setLoading(false);
+    }
+};
+useEffect(() => {
+    fetchUserDetails();
+}, []);
  
+
+
 //  Buttons Array
   const menuItems = [
     {
@@ -157,9 +204,9 @@ const ProfileScreen = () => {
               </Pressable>
             </View>
             
-            <Text style={styles.profileName}>{user.name || 'guest'}</Text>
+            <Text style={styles.profileName}>{userDetails.name || "Guest"}</Text>
             <Text style={styles.profileEmail}>{user}</Text>
-            <Text style={styles. profileNumber}>{user.phoneNumber || ''}</Text>
+            <Text style={styles. profileNumber}>{userDetails.phoneNumber || ''}</Text>
           </View>
 
           <View style={styles.statsContainer}>
@@ -249,6 +296,7 @@ const ProfileScreen = () => {
         modalpolicies={modalpolicies}
         />
       }
+      
     </View>
   );
 };

@@ -1,8 +1,10 @@
 import { Stack } from "expo-router";
+import { UserProvider } from "../AppContext";
 
 // Page Navigation Layout
 export default function RootLayout(){
     return (
+   <UserProvider>
     <Stack
     screenOptions={{
       headerShown: false,
@@ -117,9 +119,7 @@ export default function RootLayout(){
           headerTintColor: '#000', 
         }}
       />
-
-      
-
     </Stack>
+    </UserProvider>
     )
 }
