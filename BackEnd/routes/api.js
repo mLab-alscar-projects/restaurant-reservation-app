@@ -5,6 +5,8 @@ import getUsers from "../controllers.js/getUsers.js";
 import createReservation from "../controllers.js/reservations.js";
 import getAllReservations from "../controllers.js/getAllReservations.js";
 import getReservationById from "../controllers.js/getReservationsbyID.js";
+import getReservationsByUser from "../controllers.js/getUserReservations.js";
+import getReservationsByRestaurant from "../controllers.js/getReservationbyRes.js";
 
 const router = express.Router()
 
@@ -24,6 +26,14 @@ router.post("/reservations", protect, createReservation)
 router.get("/get-reservations", protect, getAllReservations)
 
 router.get('/get-reservation/:id', protect, getReservationById);
+
+// Requires user id
+router.get('/user-reservations/:id',protect, getReservationsByUser);
+
+// must have restaurant id and will return reservations based on the restaurant
+router.get('/restaurant-reservations/:id',protect, getReservationsByRestaurant);
+
+
 
 
 
