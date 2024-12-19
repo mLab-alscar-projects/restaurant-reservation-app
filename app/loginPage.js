@@ -45,11 +45,18 @@ const LoginPage = () => {
             );
 
             //  EXTRACT TOKEN
-            const { token, email: userEmail } = response.data;
+            const { token, email: userEmail, _id: UserID } = response.data;
+
            
             // SAVE TOKEN TO LOCAL STORAGE
             await AsyncStorage.setItem('userToken', token);
             await AsyncStorage.setItem('userData', userEmail);
+            await AsyncStorage.setItem('userID', UserID);
+
+            const savedUserID = await AsyncStorage.getItem('userID');
+            console.log('Saved userID:', savedUserID); // This should log the value of UserI
+
+            console.log("user retrived successfully",UserID);
 
             Toast.show({
                 type: 'success', 
