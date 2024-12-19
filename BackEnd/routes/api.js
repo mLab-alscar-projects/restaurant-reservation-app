@@ -5,6 +5,7 @@ import getUsers from "../controllers.js/getUsers.js";
 import createReservation from "../controllers.js/reservations.js";
 import getAllReservations from "../controllers.js/getAllReservations.js";
 import getReservationById from "../controllers.js/getReservationsbyID.js";
+import getReservationsByUser from "../controllers.js/getUserReservations.js";
 
 const router = express.Router()
 
@@ -24,6 +25,10 @@ router.post("/reservations", protect, createReservation)
 router.get("/get-reservations", protect, getAllReservations)
 
 router.get('/get-reservation/:id', protect, getReservationById);
+
+router.get('/user-reservations/:id', getReservationsByUser);
+
+
 
 
 
