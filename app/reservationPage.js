@@ -18,6 +18,7 @@ import axios from 'axios';
 import ReservationPicker from '../Components/toggles.js';
 
 
+
 // SCREEN DIMENSIONS
 const { width } = Dimensions.get('window');
 
@@ -31,6 +32,7 @@ const ReservationPage = () => {
   const router = useRouter();
   const { restaurant } = useLocalSearchParams ();
   const restaurantData = restaurant ? JSON.parse(restaurant) : null;
+  
 
   // FETCH MENU
   useEffect(() => {
