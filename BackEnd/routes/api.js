@@ -7,6 +7,9 @@ import getAllReservations from "../controllers.js/getAllReservations.js";
 import getReservationById from "../controllers.js/getReservationsbyID.js";
 import getReservationsByUser from "../controllers.js/getUserReservations.js";
 import getReservationsByRestaurant from "../controllers.js/getReservationbyRes.js";
+import createReview from "../controllers.js/reviews.js";
+import getAllReviews from "../controllers.js/getAllreviews.js";
+import getReviewsByRestaurantId from "../controllers.js/getReviewsResID.js";
 
 const router = express.Router()
 
@@ -32,6 +35,13 @@ router.get('/user-reservations/:id',protect, getReservationsByUser);
 
 // must have restaurant id and will return reservations based on the restaurant
 router.get('/restaurant-reservations/:id',protect, getReservationsByRestaurant);
+
+router.post('/reviews', createReview);
+
+router.get('/get-reviews', protect, getAllReviews);
+
+router.get("/reviews/restaurant/:restaurantId",protect, getReviewsByRestaurantId);
+
 
 
 
