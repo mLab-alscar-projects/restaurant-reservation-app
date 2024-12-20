@@ -12,6 +12,8 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from 'axios';
 
 const FoodReviewForm = ({ isReviewFormVisible, setIsReviewFormVisible }) => {
   const [heading, setHeading] = useState('');
@@ -59,17 +61,54 @@ const FoodReviewForm = ({ isReviewFormVisible, setIsReviewFormVisible }) => {
     animateStar();
   };
 
-  const handleSubmit = () => {
-    // Here you can add your submit logic
-    // For example, sending the review to your backend
-    console.log({ heading, rating, message });
-    
-    // Reset form
-    setHeading('');
-    setRating(0);
-    setMessage('');
-    setIsReviewFormVisible(false);
+  const handleSubmit = async () => {
+    try {
+      const token = await AsyncStorage.getItem("userToken");
+      const userId = await AsyncStorage.getItem("userID");
+      const restaurantId = await AsyncStorage.getItem("restaurantId");
+  
+      console.log(`Token: ${token}`);
+      console.log(`UserId: ${userId}`);
+      console.log(`RestaurantId: ${restaurantId}`);
+  
+      // Validate required data
+      if (!token || !userId || !restaurantId) {
+        throw new Error("Missing token, userId, or restaurantId");
+      }
+  
+      // Prepare the review object
+      const reviewData = {
+        heading,
+        rating,
+        message,
+        userId, // Retrieved from AsyncStorage
+        restaurantId, // Retrieved from AsyncStorage
+      };
+  
+      // Send the POST request with the review data
+      const response = await axios.post(
+        "https://lumpy-clover-production.up.railway.app/api/reviews", 
+        reviewData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+  
+      console.log("Review Submitted Successfully:", response.data);
+  
+      // Reset the form
+      setHeading('');
+      setRating(0);
+      setMessage('');
+      setIsReviewFormVisible(false);
+    } catch (error) {
+      console.error("Error submitting review:", error);
+    }
   };
+  
 
   const handleClose = () => {
     setIsReviewFormVisible(false);
