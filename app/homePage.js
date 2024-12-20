@@ -21,6 +21,8 @@ import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import GoogleMap from "./mapPage";
+import FoodReviewForm from "../Components/reviewForm";
+import { useRoute } from '@react-navigation/native';
 
 const HomePage = () => {
   // States
@@ -30,12 +32,19 @@ const HomePage = () => {
   const [error, setError] = useState(null);
   const [coordinates, setCoordinates] = useState('');
   const [likedRestaurants, setLikedRestaurants] = useState([]);
+  const [isReviewFormVisible, setIsReviewFormVisible] = useState(false);
   
   // Hooks
   const router = useRouter();
-
+  const route = useRoute();
+  console.log(route.params?.showReviewForm); 
  
   // Functions
+  useEffect(() => {
+    if (route.params?.showReviewForm) {
+      setIsReviewFormVisible(true);
+    }
+  }, [route.params]);
 
   const toggleLike = (restaurantId) => {
     setLikedRestaurants(prevLiked => 
@@ -285,6 +294,10 @@ const HomePage = () => {
         </View>
       )}
     </ScrollView>
+    <FoodReviewForm
+     isReviewFormVisible={isReviewFormVisible}
+     setIsReviewFormVisible={setIsReviewFormVisible}
+     />
     </View>
   );
 };

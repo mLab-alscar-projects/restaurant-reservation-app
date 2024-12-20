@@ -9,6 +9,7 @@ function Payment() {
   const {setShowPaystack, showPaystack, amount, email} = useLocalSearchParams ();
   const [isPaystackVisible, setIsPaystackVisible] = useState(showPaystack || false);
   const navigation = useNavigation();
+  const [isReviewFormVisible, setIsReviewFormVisible] = useState(true);
 
   useEffect(() => {
     setIsPaystackVisible(showPaystack || false);
@@ -34,7 +35,7 @@ function Payment() {
             Alert.alert('Payment Successful', `Transaction ID: ${res.transactionRef.reference}`);
             setIsPaystackVisible(false); 
 
-            navigation.navigate('homePage'); 
+            navigation.navigate('homePage',{showReviewForm:true}); 
           }}
           autoStart={true}
         />
