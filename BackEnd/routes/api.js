@@ -38,9 +38,9 @@ router.get('/restaurant-reservations/:id',protect, getReservationsByRestaurant);
 
 router.post('/reviews', createReview);
 
-router.get('/get-reviews', getAllReviews);
+router.get('/get-reviews', protect, getAllReviews);
 
-router.get("/reviews/restaurant/:restaurantId", getReviewsByRestaurantId);
+router.get("/reviews/restaurant/:restaurantId",protect, getReviewsByRestaurantId);
 
 
 
