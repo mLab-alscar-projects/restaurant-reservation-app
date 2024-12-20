@@ -36,7 +36,7 @@ const reviewsSchema = new mongoose.Schema({
   },
   isActive: { 
     type: Boolean, 
-    default: true 
+    default: false 
   },
   isRead: { 
     type: Boolean, 
