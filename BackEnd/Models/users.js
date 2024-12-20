@@ -30,6 +30,14 @@ const clientSchema = new mongoose.Schema({
         type:String,
         default:"",
      
+    },
+    isActive:{
+        type:Boolean,
+        default:true
+    },
+    isRead:{
+        type:Boolean,
+        default: true
     }
 });
 
