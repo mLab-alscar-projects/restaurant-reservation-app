@@ -60,7 +60,7 @@ in both ios and android devices
 1. Clone the Repository
     ``` bash
 
-    git clone: https://github.com/AlsonAfrica/Basic-Node-Server.git
+    git clone: https://github.com/mLab-alscar-projects/restaurant-reservation-app.git
 
 2. Install neccessay dependencies
     ``` bash
