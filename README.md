@@ -79,8 +79,8 @@ in both ios and android devices
 
 
 
-# Project Structure
-## Front End Project Structure
+### Project Structure
+#### Front End Project Structure
 
      ``` bash
       /app
@@ -130,6 +130,29 @@ in both ios and android devices
       └── database.js
       └── packages.json
       └── server.js
+
+
+# Design and Planning
+- To see the projects planning and User Interface design please feel free to visit the provided link below: 
+  https://www.figma.com/design/0aCptNX42sHpO0gMLrJA2N/Untitled?node-id=0-1&p=f&t=f56gpA7pfeEcg55D-0
+
+# How to Contribute
+
+- If you wish to contribute to this project, please follow these steps:
+
+- Fork the repository.
+
+- Create a new branch (feature/your-feature-name).
+
+- Commit your changes.
+
+- Push to the branch.
+
+- Open a Pull Request.
+
+## License
+This project is licensed under the MIT License - see the LICENSE.md file for details.
+
 
 
 
