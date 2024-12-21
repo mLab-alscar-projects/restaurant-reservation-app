@@ -6,6 +6,10 @@ The Restaurant Reservation Platform is a full-stack application that connects di
 This app consist of User side, with integrated frontend and backend. Please note that the project is running on (Expo 52.2) it might not run on older versions of expo compatible
 in both ios and android devices
 
+# Contributers
+- Nhlakanipho Radebe
+- Oscar Poco
+
 # Technical Architecture (Tech Stack)
 
 ## Frontend
