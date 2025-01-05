@@ -131,6 +131,9 @@ npx expo start
 
 ## 🎨 Design and Planning
 View our project planning and UI design on [Figma](https://www.figma.com/design/0aCptNX42sHpO0gMLrJA2N/Untitled?node-id=0-1&p=f&t=f56gpA7pfeEcg55D-0)
+
+
+
 Documentation: Please follow the link for the apps documentation: https://docs.google.com/document/d/1jj8k0lam6liPqKIZdEp5yd-Oc3-ZGfRc5oJtkAxrWnM/edit?usp=sharing
 
 ## 🤝 How to Contribute
