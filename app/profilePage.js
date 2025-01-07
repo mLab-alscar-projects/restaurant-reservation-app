@@ -221,6 +221,21 @@ useEffect(() => {
             <Text style={styles.profileEmail}>{user || ''}</Text>
             <Text style={styles. profileNumber}>{userDetails.phoneNumber || ''}</Text>
           </View>
+
+          {/* <View style={styles.statsContainer}>
+            <View style={styles.statItem}>
+              <Text style={styles.statValue}>{user.totalReservations || 0}</Text>
+              <Text style={styles.statLabel}>Reservations</Text>
+            </View>
+            <View style={styles.statItem}>
+              <Text style={styles.statValue}>{user.loyaltyPoints || 0}</Text>
+              <Text style={styles.statLabel}>Shared</Text>
+            </View>
+            <View style={styles.statItem}>
+              <Text style={styles.statValue}>{user.memberSince || 'Null'}</Text>
+              <Text style={styles.statLabel}>Date</Text>
+            </View>
+          </View> */}
         </View>
       </LinearGradient>
 
