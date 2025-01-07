@@ -15,7 +15,8 @@ import {
   LogOut,
   Edit2,
   HelpCircle,
-  Shield
+  Shield,
+  Book
 } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
 import ProfileModal from '../Components/profilemodal';
@@ -24,6 +25,7 @@ import TermsAndConditions from '../Components/policiesmodal';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native';
+import Reservations from '../Components/reservations';
 
 const ProfileScreen = () => {
   // Hooks
@@ -39,6 +41,7 @@ const ProfileScreen = () => {
   const [user, setUser] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [reservationModal, setReservationModal] = useState(false)
   const [userDetails, setUserDetails] = useState({ name: '', phoneNumber: '' });
 
   // Functions
@@ -56,7 +59,6 @@ const ProfileScreen = () => {
   }, []);
 
   console.log('user : ', user);
-
 
   // Edit the user details
   const EditNameandPhone = async () => {
@@ -135,6 +137,7 @@ const ProfileScreen = () => {
         setLoading(false);
     }
 };
+
 useEffect(() => {
     fetchUserDetails();
 }, []);
@@ -147,6 +150,12 @@ useEffect(() => {
       title: "Edit Profile",
       subtitle: "Update your personal information",
       icon: <Edit2 color="#2c3e50" size={24} />
+    },
+    {
+      title: "Reservations",
+      subtitle: "View your reservations",
+      icon: <Book color="#2c3e50" size={24} />
+
     },
     {
       title: "Privacy & Security",
@@ -183,6 +192,10 @@ useEffect(() => {
     setModalpolicies(true)
   }
 
+  const handleReservations = ()=>{
+    setReservationModal(true)
+  }
+
 
 
 // Beginning of rendered Components
@@ -204,8 +217,8 @@ useEffect(() => {
               </Pressable>
             </View>
             
-            <Text style={styles.profileName}>{userDetails.name || "Guest"}</Text>
-            <Text style={styles.profileEmail}>{user}</Text>
+            <Text style={styles.profileName}>{userDetails.name || ''}</Text>
+            <Text style={styles.profileEmail}>{user || ''}</Text>
             <Text style={styles. profileNumber}>{userDetails.phoneNumber || ''}</Text>
           </View>
 
@@ -247,6 +260,10 @@ useEffect(() => {
                 handleForm()
               } if (item.title === "Privacy & Security")
                 handlePolicies()
+              {
+                if (item.title === "Reservations")
+                handleReservations()
+              }
             }}
           >
             <View style={styles.menuItemIcon}>
@@ -294,6 +311,12 @@ useEffect(() => {
         <TermsAndConditions
         setModalpolicies={setModalpolicies} 
         modalpolicies={modalpolicies}
+        />
+      }
+      {  reservationModal &&
+        <Reservations
+        setReservationModal={setReservationModal}
+        reservationModal={reservationModal}
         />
       }
       
