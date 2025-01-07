@@ -71,6 +71,9 @@ const Reservations = ({ setReservationModal, reservationModal }) => {
   const [error, setError] = useState(null);
   const [animatedValue] = useState(new Animated.Value(0));
 
+  const reservationsnum = reservations.length
+  console.log(reservationsnum)
+
   const fetchReservations = async () => {
     try {
       setLoading(true);
@@ -203,7 +206,7 @@ const Reservations = ({ setReservationModal, reservationModal }) => {
           ]}
         >
           <View style={styles.modalHeader}>
-            <Text style={styles.modalTitle}>Your Reservations</Text>
+            <Text style={styles.modalTitle}>Your Reservations {reservationsnum}</Text>
             <TouchableOpacity style={styles.closeButton} onPress={handleClose}>
               <Text style={styles.closeButtonText}>✕</Text>
             </TouchableOpacity>

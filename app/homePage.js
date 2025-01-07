@@ -23,6 +23,7 @@ import axios from "axios";
 import GoogleMap from "./mapPage";
 import FoodReviewForm from "../Components/reviewForm";
 import { useRoute } from '@react-navigation/native';
+import { Share } from "react-native";
 
 const HomePage = () => {
   // States
@@ -54,9 +55,22 @@ const HomePage = () => {
     );
   };
 
-  const handleShare = (restaurant) => {
-    console.log(`Sharing ${restaurant.name}`);
-  };
+
+const handleShare = async (restaurant) => {
+  try {
+    const result = await Share.share({
+      message: `Check out this restaurant: ${restaurant.name}\n${restaurant.description}\nLocation: ${restaurant.location}`,
+    });
+    if (result.action === Share.sharedAction) {
+      console.log('Shared successfully');
+    } else {
+      console.log('Share was dismissed');
+    }
+  } catch (error) {
+    console.error('Error sharing:', error);
+  }
+};
+
 
   
     const renderStarRating = (rating) => {
