@@ -13,9 +13,11 @@ import { useRouter } from 'expo-router';
 import { useLocalSearchParams  } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 // ICONS
 import ReservationPicker from '../Components/toggles.js';
+import Reviews from '../Components/reviewsModal.js';
 
 
 
@@ -32,6 +34,7 @@ const ReservationPage = () => {
   const router = useRouter();
   const { restaurant } = useLocalSearchParams ();
   const restaurantData = restaurant ? JSON.parse(restaurant) : null;
+  const [reviews, setReviews] = useState(false);
   
 
   // FETCH MENU
@@ -96,6 +99,12 @@ const ReservationPage = () => {
       {/* HEADER */}
       <View style={[styles.header, {backgroundColor: restaurantData.color}]}>
         <Text style={styles.headerTitle}>{restaurantData.name}</Text>
+          
+          <View style={styles.reviewcontainer}>
+            <Pressable onPress={()=>setReviews(true)}>
+            <MaterialIcons name="reviews" size={24} color="black" />
+           </Pressable>
+          </View> 
       </View>
 
 
@@ -131,14 +140,20 @@ const ReservationPage = () => {
         )}
         contentContainerStyle={styles.menuList}
       />
-
-
+  
+      
       {/* ADD MORE MENU BUTTON */}
       <View style={styles.addButtonWrapper}>
         <Pressable style={[styles.addButton, {backgroundColor: restaurantData.color}]} onPress={handleCheckout}>
           <Text style={styles.addButtonText}>Reserve</Text>
         </Pressable>
       </View>
+
+      <Reviews
+      reviews={reviews}
+      setReviews={setReviews}
+      restaurantData={restaurantData}
+      />
     </View>
   );
 };
@@ -280,6 +295,10 @@ const styles = StyleSheet.create({
   dateTimeContainer:
   {
     paddingBottom: 10
+  },
+  reviewcontainer:{
+    position:"absolute",
+    right:20
   }
 });
 

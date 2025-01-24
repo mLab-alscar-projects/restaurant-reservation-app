@@ -10,6 +10,7 @@ import getReservationsByRestaurant from "../controllers.js/getReservationbyRes.j
 import createReview from "../controllers.js/reviews.js";
 import getAllReviews from "../controllers.js/getAllreviews.js";
 import getReviewsByRestaurantId from "../controllers.js/getReviewsResID.js";
+import updateReservation from "../controllers.js/updateReservations.js";
 
 const router = express.Router()
 
@@ -42,9 +43,7 @@ router.get('/get-reviews', protect, getAllReviews);
 
 router.get("/reviews/restaurant/:restaurantId",protect, getReviewsByRestaurantId);
 
-
-
-
+router.put("/update-reservation/:id",updateReservation)
 
 
 export default router
